@@ -1,0 +1,63 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+/* Variáveis Globais*/
+:root {
+  --fonte-principal: "Poppins", "Segoe UI", sans-serif;
+  --raio-borda: 12px;
+  --espaco-sm: 8px;
+  --espaco-md: 16px;
+  --espaco-lg: 24px;
+}
+
+/* Modo Escuro*/
+:root,
+[data-theme="dark"] {
+  --cor-fundo-principal: #0d0d26;
+  --cor-fundo-sidebar: #15153d;
+  --cor-fundo-cartao: #101030;
+  --cor-fundo-item: #1b1b48;
+
+  --cor-texto-principal: #ffffff;
+  --cor-texto-secundario: #a4a8d1;
+  --cor-texto-destaque: #7b86f0;
+
+  --cor-hover: #23234f;
+  --cor-ativo: #7b86f0;
+  --cor-botao-fundo: #ffffff;
+  --cor-botao-texto: #15153d;
+}
+
+/* Modo Claro */
+[data-theme="light"] {
+  --cor-fundo-principal: #f0f2f9;
+  --cor-fundo-sidebar: #aeb4f7;
+  --cor-fundo-cartao: #b5b8db;
+  --cor-fundo-item: #e4e7f5;
+
+  --cor-texto-principal: #15153d;
+  --cor-texto-secundario: #000000;
+  --cor-texto-destaque: #5b66d9;
+
+  --cor-hover: #e8ebf7;
+  --cor-ativo: #5b66d9;
+  --cor-botao-fundo: #15153d;
+  --cor-botao-texto: #ffffff;
+}
+
+body {
+  background-color: var(--cor-fundo-principal);
+  font-family: var(--fonte-principal);
+  color: var(--cor-texto-principal);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}

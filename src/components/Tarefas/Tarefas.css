@@ -1,0 +1,313 @@
+.tarefas {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: var(--espaco-lg);
+  align-items: start;
+}
+
+@media (max-width: 800px) {
+  .tarefas {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tarefas__titulo-secao {
+  color: var(--cor-texto-destaque);
+  font-size: 1.1rem;
+  margin: 0 0 var(--espaco-md);
+}
+
+.tarefas__cabecalho-conteudo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--espaco-sm);
+  margin-bottom: var(--espaco-md);
+}
+
+.tarefas__cabecalho-conteudo .tarefas__titulo-secao {
+  margin: 0;
+}
+
+.tarefas__seletor-visualizacao {
+  display: flex;
+  gap: 4px;
+  background-color: var(--cor-fundo-item);
+  border-radius: 999px;
+  padding: 4px;
+}
+
+.tarefas__botao-visualizacao {
+  background: transparent;
+  border: none;
+  border-radius: 999px;
+  color: var(--cor-texto-secundario);
+  padding: 6px 16px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tarefas__botao-visualizacao--ativo {
+  background-color: var(--cor-texto-destaque);
+  color: var(--cor-texto-principal);
+}
+
+/* ---------- Formulário ---------- */
+
+.tarefas__formulario {
+  background-color: var(--cor-fundo-cartao);
+  border-radius: var(--raio-borda);
+  padding: var(--espaco-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-md);
+}
+
+.tarefas__campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--cor-texto-secundario);
+  font-size: 0.9rem;
+}
+
+.tarefas__campo input[type="text"],
+.tarefas__campo input[type="date"] {
+  background-color: var(--cor-fundo-item);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: var(--cor-texto-principal);
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+.tarefas__campo input[type="text"]:focus,
+.tarefas__campo input[type="date"]:focus {
+  outline: none;
+  border-color: var(--cor-texto-destaque);
+}
+
+.tarefas__campo input[type="range"] {
+  accent-color: var(--cor-texto-destaque);
+}
+
+.tarefas__botao-cadastrar {
+  margin-top: var(--espaco-sm);
+  padding: 12px;
+  border: none;
+  border-radius: 999px;
+  background-color: var(--cor-texto-destaque);
+  color: var(--cor-texto-principal);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.tarefas__botao-cadastrar:hover {
+  opacity: 0.9;
+}
+
+.tarefas__botao-cadastrar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ---------- Lista ---------- */
+
+.tarefas__erro {
+  background-color: rgba(240, 100, 100, 0.12);
+  color: #f06464;
+  border: 1px solid rgba(240, 100, 100, 0.3);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  margin: 0 0 var(--espaco-md);
+}
+
+.tarefas__lista {
+  background-color: var(--cor-fundo-cartao);
+  border-radius: var(--raio-borda);
+  padding: var(--espaco-lg);
+}
+
+.tarefas__vazio {
+  color: var(--cor-texto-secundario);
+  font-size: 0.9rem;
+}
+
+.tarefas__item {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-md);
+  padding: 14px 14px 14px 18px;
+  border-radius: 10px;
+  background-color: var(--cor-fundo-item);
+  margin-bottom: var(--espaco-sm);
+  border-left: 4px solid transparent;
+  transition: opacity 0.15s ease;
+}
+
+.tarefas__item--pendente {
+  border-left-color: #e06c6c;
+}
+
+.tarefas__item--em_andamento {
+  border-left-color: #f0a83c;
+  background-color: rgba(240, 168, 60, 0.06);
+}
+
+.tarefas__item--concluida {
+  border-left-color: #3ddc97;
+  opacity: 0.65;
+}
+
+.tarefas__item--concluida .tarefas__item-descricao {
+  text-decoration: line-through;
+}
+
+.tarefas__item--ativa {
+  box-shadow: 0 0 0 1px var(--cor-texto-destaque);
+}
+
+.tarefas__botao-estudar {
+  background: transparent;
+  border: 1px solid rgba(123, 134, 240, 0.35);
+  border-radius: 999px;
+  color: var(--cor-texto-secundario);
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tarefas__botao-estudar:hover {
+  color: var(--cor-texto-principal);
+  border-color: var(--cor-texto-destaque);
+}
+
+.tarefas__botao-estudar--ativa {
+  background-color: var(--cor-texto-destaque);
+  border-color: var(--cor-texto-destaque);
+  color: var(--cor-texto-principal);
+}
+
+.tarefas__item-principal {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.tarefas__item-descricao {
+  color: var(--cor-texto-principal);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tarefas__item-data {
+  color: var(--cor-texto-secundario);
+  font-size: 0.8rem;
+}
+
+.tarefas__select-status {
+  background-color: var(--cor-fundo-sidebar);
+  color: var(--cor-texto-principal);
+  border: 1px solid rgba(123, 134, 240, 0.25);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-family: inherit;
+  font-size: 0.85rem;
+}
+
+.tarefas__badge-prioridade {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.tarefas__badge-prioridade--baixa {
+  background-color: rgba(122, 224, 158, 0.15);
+  color: #7ae09e;
+}
+
+.tarefas__badge-prioridade--media {
+  background-color: rgba(240, 200, 100, 0.15);
+  color: #f0c864;
+}
+
+.tarefas__badge-prioridade--alta {
+  background-color: rgba(240, 100, 100, 0.15);
+  color: #f06464;
+}
+
+.tarefas__botao-remover {
+  background: transparent;
+  border: none;
+  color: var(--cor-texto-secundario);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.tarefas__botao-remover:hover {
+  color: #f06464;
+}
+
+.tarefas__botao-editar {
+  background: transparent;
+  border: none;
+  color: var(--cor-texto-secundario);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.tarefas__botao-editar:hover {
+  color: var(--cor-texto-destaque);
+}
+
+.tarefas__item-edicao {
+  background-color: var(--cor-fundo-cartao);
+  border: 1px solid var(--cor-texto-destaque);
+  border-radius: 10px;
+  padding: var(--espaco-md);
+  margin-bottom: var(--espaco-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-md);
+}
+
+.tarefas__acoes-edicao {
+  display: flex;
+  gap: var(--espaco-sm);
+}
+
+.tarefas__acoes-edicao .tarefas__botao-cadastrar {
+  margin-top: 0;
+  flex: 1;
+}
+
+.tarefas__botao-cancelar {
+  padding: 12px 20px;
+  border: 1px solid rgba(123, 134, 240, 0.25);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--cor-texto-secundario);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.tarefas__botao-cancelar:hover {
+  color: var(--cor-texto-principal);
+}

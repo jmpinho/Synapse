@@ -1,0 +1,58 @@
+.tarefas-matriz {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--espaco-md);
+}
+
+@media (max-width: 700px) {
+  .tarefas-matriz {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tarefas-matriz__quadrante {
+  background-color: var(--cor-fundo-item);
+  border-radius: var(--raio-borda);
+  padding: var(--espaco-md);
+  border-top: 3px solid transparent;
+}
+
+.tarefas-matriz__quadrante--fazer {
+  border-top-color: #f06464;
+}
+
+.tarefas-matriz__quadrante--planejar {
+  border-top-color: #7ae09e;
+}
+
+.tarefas-matriz__quadrante--delegar {
+  border-top-color: #f0c864;
+}
+
+.tarefas-matriz__quadrante--eliminar {
+  border-top-color: var(--cor-texto-secundario);
+}
+
+.tarefas-matriz__cabecalho-quadrante {
+  margin-bottom: var(--espaco-sm);
+}
+
+.tarefas-matriz__cabecalho-quadrante h3 {
+  color: var(--cor-texto-principal);
+  font-size: 0.92rem;
+  margin: 0;
+}
+
+.tarefas-matriz__cabecalho-quadrante span {
+  color: var(--cor-texto-secundario);
+  font-size: 0.72rem;
+}
+
+.tarefas-matriz__vazio {
+  color: var(--cor-texto-secundario);
+  font-size: 0.78rem;
+  border: 1px dashed rgba(123, 134, 240, 0.2);
+  border-radius: 8px;
+  padding: var(--espaco-md);
+  text-align: center;
+}

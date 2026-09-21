@@ -1,0 +1,142 @@
+.conteudo {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.conteudo__cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--cor-texto-principal);
+}
+
+.conteudo__botao-novo,
+.conteudo__botao-salvar {
+  background-color: var(--cor-texto-destaque);
+  color: #0b0d1b;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.conteudo__formulario {
+  background-color: var(--cor-fundo-cartao);
+  border: 1px solid rgba(123, 134, 240, 0.15);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.conteudo__formulario input,
+.conteudo__formulario textarea {
+  background-color: var(--cor-fundo-item);
+  border: 1px solid rgba(123, 134, 240, 0.2);
+  border-radius: 6px;
+  padding: 10px;
+  color: var(--cor-texto-principal);
+  font-family: inherit;
+}
+.conteudo__card-acoes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.conteudo__botao-deletar {
+  background: transparent;
+  border: none;
+  color: #ff5555;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+}
+
+.conteudo__botao-deletar:hover {
+  color: #ff2222;
+}
+.conteudo__filtros {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.conteudo__tag {
+  background-color: var(--cor-fundo-item);
+  border: 1px solid rgba(123, 134, 240, 0.2);
+  color: var(--cor-texto-secundario);
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.conteudo__tag--ativa {
+  border-color: var(--cor-texto-destaque);
+  color: var(--cor-texto-destaque);
+}
+
+.conteudo__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.conteudo__card {
+  background-color: var(--cor-fundo-cartao);
+  border: 1px solid rgba(123, 134, 240, 0.15);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.conteudo__card-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+}
+
+.conteudo__card-disciplina {
+  color: var(--cor-texto-destaque);
+  font-weight: 600;
+}
+
+.conteudo__card-categoria {
+  color: var(--cor-texto-secundario);
+}
+
+.conteudo__card-titulo {
+  color: var(--cor-texto-principal);
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.conteudo__card-texto {
+  color: var(--cor-texto-secundario);
+  font-size: 0.9rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.conteudo__card-link {
+  color: var(--cor-texto-destaque);
+  font-size: 0.85rem;
+  text-decoration: none;
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.conteudo__card-link:hover {
+  text-decoration: underline;
+}

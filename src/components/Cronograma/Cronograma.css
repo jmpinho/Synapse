@@ -1,0 +1,372 @@
+.cronograma {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: var(--espaco-lg);
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .cronograma {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- Calendário ---------- */
+
+.cronograma__calendario {
+  background-color: var(--cor-fundo-cartao);
+  border-radius: var(--raio-borda);
+  padding: var(--espaco-lg);
+}
+
+.cronograma__cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--espaco-md);
+}
+
+.cronograma__navegacao {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-sm);
+}
+
+.cronograma__mes-ano {
+  color: var(--cor-texto-principal);
+  font-size: 1.1rem;
+  margin: 0;
+  min-width: 180px;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.cronograma__botao-nav {
+  background: transparent;
+  border: 1px solid rgba(123, 134, 240, 0.25);
+  border-radius: 999px;
+  color: var(--cor-texto-secundario);
+  width: 32px;
+  height: 32px;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.cronograma__botao-nav:hover {
+  color: var(--cor-texto-principal);
+  border-color: var(--cor-texto-destaque);
+}
+
+.cronograma__botao-hoje {
+  background: transparent;
+  border: 1px solid rgba(123, 134, 240, 0.25);
+  border-radius: 999px;
+  color: var(--cor-texto-secundario);
+  padding: 8px 18px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cronograma__botao-hoje:hover {
+  color: var(--cor-texto-principal);
+  border-color: var(--cor-texto-destaque);
+}
+
+.cronograma__erro {
+  background-color: rgba(240, 100, 100, 0.12);
+  color: #f06464;
+  border: 1px solid rgba(240, 100, 100, 0.3);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  margin: 0 0 var(--espaco-md);
+}
+
+.cronograma__grade {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+.cronograma__dia-semana {
+  text-align: center;
+  color: var(--cor-texto-secundario);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding-bottom: 6px;
+}
+
+.cronograma__celula {
+  background-color: var(--cor-fundo-item);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  min-height: 84px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+}
+
+.cronograma__celula:hover {
+  border-color: rgba(123, 134, 240, 0.35);
+}
+
+.cronograma__celula--fora-do-mes {
+  opacity: 0.35;
+}
+
+.cronograma__celula--hoje .cronograma__numero-dia {
+  background-color: var(--cor-texto-destaque);
+  color: var(--cor-texto-principal);
+}
+
+.cronograma__celula--selecionada {
+  border-color: var(--cor-texto-destaque);
+}
+
+.cronograma__numero-dia {
+  color: var(--cor-texto-principal);
+  font-size: 0.8rem;
+  font-weight: 600;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cronograma__chips {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 100%;
+}
+
+.cronograma__chip {
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.cronograma__chip--concluido {
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+.cronograma__chip--prova {
+  background-color: rgba(240, 100, 100, 0.18);
+  color: #f06464;
+}
+
+.cronograma__chip--trabalho {
+  background-color: rgba(240, 168, 60, 0.18);
+  color: #f0a83c;
+}
+
+.cronograma__chip--curso {
+  background-color: rgba(123, 134, 240, 0.18);
+  color: #7b86f0;
+}
+
+.cronograma__chip--outro {
+  background-color: rgba(164, 168, 209, 0.18);
+  color: var(--cor-texto-secundario);
+}
+
+.cronograma__chip-mais {
+  font-size: 0.65rem;
+  color: var(--cor-texto-secundario);
+}
+
+/* ---------- Painel do dia ---------- */
+
+.cronograma__painel-dia {
+  background-color: var(--cor-fundo-cartao);
+  border-radius: var(--raio-borda);
+  padding: var(--espaco-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-md);
+}
+
+.cronograma__titulo-dia {
+  color: var(--cor-texto-destaque);
+  font-size: 1rem;
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.cronograma__vazio {
+  color: var(--cor-texto-secundario);
+  font-size: 0.9rem;
+}
+
+.cronograma__lista-dia {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-sm);
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.cronograma__item {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-sm);
+  padding: 10px 12px;
+  border-radius: 10px;
+  background-color: var(--cor-fundo-item);
+}
+
+.cronograma__item--concluido {
+  opacity: 0.6;
+}
+
+.cronograma__item--concluido .cronograma__item-descricao {
+  text-decoration: line-through;
+}
+
+.cronograma__checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--cor-texto-destaque);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.cronograma__badge-tipo {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.cronograma__badge-tipo--prova {
+  background-color: rgba(240, 100, 100, 0.15);
+  color: #f06464;
+}
+
+.cronograma__badge-tipo--trabalho {
+  background-color: rgba(240, 168, 60, 0.15);
+  color: #f0a83c;
+}
+
+.cronograma__badge-tipo--curso {
+  background-color: rgba(123, 134, 240, 0.15);
+  color: #7b86f0;
+}
+
+.cronograma__badge-tipo--outro {
+  background-color: rgba(164, 168, 209, 0.15);
+  color: var(--cor-texto-secundario);
+}
+
+.cronograma__item-principal {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.cronograma__item-descricao {
+  color: var(--cor-texto-principal);
+  font-weight: 600;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cronograma__item-observacao {
+  color: var(--cor-texto-secundario);
+  font-size: 0.78rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cronograma__botao-remover {
+  background: transparent;
+  border: none;
+  color: var(--cor-texto-secundario);
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 4px 6px;
+  flex-shrink: 0;
+}
+
+.cronograma__botao-remover:hover {
+  color: #f06464;
+}
+
+/* ---------- Formulário rápido ---------- */
+
+.cronograma__formulario {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-sm);
+  border-top: 1px solid rgba(123, 134, 240, 0.15);
+  padding-top: var(--espaco-md);
+}
+
+.cronograma__campo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--cor-texto-secundario);
+  font-size: 0.85rem;
+}
+
+.cronograma__campo input[type="text"],
+.cronograma__campo select {
+  background-color: var(--cor-fundo-item);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 9px 10px;
+  color: var(--cor-texto-principal);
+  font-family: inherit;
+  font-size: 0.9rem;
+}
+
+.cronograma__campo input[type="text"]:focus,
+.cronograma__campo select:focus {
+  outline: none;
+  border-color: var(--cor-texto-destaque);
+}
+
+.cronograma__botao-cadastrar {
+  margin-top: var(--espaco-sm);
+  padding: 11px;
+  border: none;
+  border-radius: 999px;
+  background-color: var(--cor-texto-destaque);
+  color: var(--cor-texto-principal);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.cronograma__botao-cadastrar:hover {
+  opacity: 0.9;
+}
+
+.cronograma__botao-cadastrar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

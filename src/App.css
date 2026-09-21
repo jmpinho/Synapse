@@ -1,0 +1,42 @@
+.app {
+  display: flex;
+  min-height: 100vh;
+}
+
+.app__conteudo {
+  flex: 1;
+  min-height: 100vh;
+  padding: 48px 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.app__cabecalho {
+  width: 100%;
+  max-width: 1100px;
+  margin-bottom: var(--espaco-lg);
+}
+
+.app__cabecalho h1 {
+  color: var(--cor-texto-principal);
+  font-size: 2.2rem;
+  margin: 0 0 10px;
+}
+
+.app__cabecalho p {
+  color: var(--cor-texto-secundario);
+  margin: 0;
+}
+
+.app__area-pagina {
+  width: 100%;
+  max-width: 1100px;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.app__pagina-oculta {
+  display: none;
+}

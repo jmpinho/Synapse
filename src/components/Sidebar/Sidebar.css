@@ -1,0 +1,107 @@
+.sidebar {
+  width: 260px;
+  flex-shrink: 0; 
+  min-height: 100vh;
+  background-color: var(--cor-fundo-sidebar);
+  display: flex;
+  flex-direction: column;
+  padding: var(--espaco-lg) var(--espaco-md);
+  box-sizing: border-box;
+}
+
+.sidebar__logo {
+  user-select: none;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--cor-texto-principal);
+  margin-bottom: var(--espaco-lg);
+}
+
+.sidebar__logo-y {
+  color: var(--cor-texto-destaque);
+}
+
+.sidebar__logo-estrela {
+  position: relative;
+  top: 7px;
+  left: 5px;
+  width: 40px;
+  height: 40px;
+  transform: rotate(145deg);
+}
+
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.sidebar__item {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-md);
+  padding: 12px var(--espaco-md);
+  border: none;
+  border-radius: var(--raio-borda);
+  background: transparent;
+  color: var(--cor-texto-secundario);
+  font-family: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.sidebar__item:hover {
+  background-color: var(--cor-hover);
+  color: var(--cor-texto-principal);
+}
+
+.sidebar__item--ativo {
+  background-color: var(--cor-hover);
+  color: var(--cor-texto-principal);
+  font-weight: 600;
+}
+
+.sidebar__rodape {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espaco-md);
+  margin-top: var(--espaco-lg);
+}
+
+.sidebar__botao-sair {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 999px;
+  background-color: var(--cor-botao-fundo);
+  color: var(--cor-botao-texto);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.sidebar__botao-sair:hover {
+  opacity: 0.9;
+}
+
+.sidebar__toggle-tema {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-sm);
+  background: transparent;
+  border: none;
+  color: var(--cor-texto-secundario);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.sidebar__toggle-bolinha {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: var(--cor-texto-principal);
+}

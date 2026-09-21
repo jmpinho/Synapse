@@ -1,0 +1,35 @@
+.tarefas-kanban {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--espaco-md);
+}
+
+@media (max-width: 900px) {
+  .tarefas-kanban {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tarefas-kanban__coluna {
+  background-color: var(--cor-fundo-item);
+  border-radius: var(--raio-borda);
+  padding: var(--espaco-md);
+  min-height: 120px;
+}
+
+.tarefas-kanban__titulo-coluna {
+  color: var(--cor-texto-destaque);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin: 0 0 var(--espaco-sm);
+}
+
+.tarefas-kanban__vazio {
+  color: var(--cor-texto-secundario);
+  font-size: 0.78rem;
+  border: 1px dashed rgba(123, 134, 240, 0.25);
+  border-radius: 8px;
+  padding: var(--espaco-md);
+  text-align: center;
+}

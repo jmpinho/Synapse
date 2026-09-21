@@ -1,0 +1,160 @@
+.pomodoro {
+  background-color: var(--cor-fundo-cartao);
+  border: 1px solid rgba(123, 134, 240, 0.15);
+  border-radius: 20px;
+  padding: 32px 40px;
+  width: 100%;
+  max-width: 460px;
+  max-height: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espaco-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
+.pomodoro__tarefa-ativa {
+  width: 100%;
+  background-color: var(--cor-fundo-item);
+  border: 1px solid var(--cor-texto-destaque);
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.85rem;
+}
+
+.pomodoro__tarefa-ativa-rotulo {
+  color: var(--cor-texto-secundario);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.pomodoro__tarefa-ativa-titulo {
+  color: var(--cor-texto-principal);
+  font-weight: 600;
+}
+
+.pomodoro__tarefa-ativa--vazia {
+  border-color: rgba(123, 134, 240, 0.2);
+  color: var(--cor-texto-secundario);
+  font-style: italic;
+  text-align: center;
+}
+
+.pomodoro__abas {
+  display: flex;
+  gap: var(--espaco-sm);
+  justify-content: center;
+  width: 100%;
+}
+
+.pomodoro__aba {
+  background: transparent;
+  border: none;
+  color: var(--cor-texto-secundario);
+  font-weight: 600;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  padding-bottom: 6px;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.pomodoro__aba:hover {
+  color: var(--cor-texto-principal);
+}
+
+.pomodoro__aba--ativa {
+  color: var(--cor-texto-destaque);
+  border-bottom-color: var(--cor-texto-destaque);
+}
+
+.pomodoro__anel-container {
+  position: relative;
+  width: 240px;
+  height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pomodoro__anel-trilha {
+  stroke: var(--cor-fundo-item);
+}
+
+.pomodoro__anel-progresso {
+  stroke: var(--cor-texto-destaque);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear;
+}
+
+.pomodoro__centro {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pomodoro__tempo {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--cor-texto-principal);
+  font-variant-numeric: tabular-nums;
+  padding-top: 30px;
+  margin-bottom: 8px; /* Ajustado de 15px para aproximação do rótulo */
+}
+
+.pomodoro__modo-atual {
+  color: var(--cor-texto-secundario);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding-top: 10%;
+}
+
+.pomodoro__controles {
+  display: flex;
+  gap: var(--espaco-sm);
+  width: 100%;
+}
+
+.pomodoro__botao {
+  flex: 1;
+  padding: 12px 24px;
+  border-radius: 999px;
+  border: 1px solid var(--cor-fundo-item);
+  background: transparent;
+  color: var(--cor-texto-principal);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: transform 0.1s ease, opacity 0.15s ease;
+}
+
+.pomodoro__botao--primario {
+  background-color: var(--cor-texto-destaque);
+  border-color: var(--cor-texto-destaque);
+  color: #0b0d1b; /* Cor escura adicionada para dar contraste com o fundo claro */
+}
+
+.pomodoro__botao:hover {
+  opacity: 0.9;
+}
+
+.pomodoro__botao:active {
+  transform: scale(0.97);
+}
+
+.pomodoro__ciclos {
+  color: var(--cor-texto-secundario);
+  font-size: 0.85rem;
+  margin: 0;
+}
