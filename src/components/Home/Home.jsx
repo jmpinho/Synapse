@@ -38,13 +38,6 @@ const FRASES_MOTIVACIONAIS = [
   "O cronograma de hoje é só um rascunho — ajuste sem culpa.",
 ];
 
-function obterSaudacao() {
-  const hora = new Date().getHours();
-  if (hora < 12) return "Bom dia";
-  if (hora < 18) return "Boa tarde";
-  return "Boa noite";
-}
-
 function obterIntervaloDaSemana() {
   const hoje = new Date();
   hoje.setHours(0, 0, 0, 0);
@@ -134,7 +127,6 @@ export default function Home({ aoNavegar }) {
   return (
     <div className="home">
       <header className="home__header">
-        <h1>{obterSaudacao()}, Estudante! 👋</h1>
         <p className="home__frase">💡 {fraseDoDia}</p>
       </header>
 
