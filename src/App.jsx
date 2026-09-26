@@ -17,7 +17,7 @@ export default function App() {
       <Sidebar
         paginaAtiva={paginaAtiva}
         aoNavegar={setPaginaAtiva}
-        aoSair={() => alert("Sair (ligue isso à sua lógica de autenticação)")}
+        aoSair={() => alert("Botão ilustrativo para logoff ao ter mais contas")}
       />
 
       <main className="app__conteudo">

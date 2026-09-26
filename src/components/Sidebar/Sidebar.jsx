@@ -19,7 +19,6 @@ const itensMenu = [
 ];
 
 export default function Sidebar({ paginaAtiva = "home", aoNavegar, aoSair }) {
-  // Define o tema escuro como padrão (ou claro dependendo da sua preferência)
   const [modoEscuro, setModoEscuro] = useState(true);
 
   // Aplica o atributo 'data-theme' no <html> sempre que o tema muda

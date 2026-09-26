@@ -114,7 +114,12 @@ export default function Home({ aoNavegar }) {
   const eventosDaSemana = useMemo(
     () =>
       eventos
-        .filter((evento) => evento.data >= inicioISO && evento.data <= fimISO)
+        .filter(
+          (evento) =>
+            !evento.concluido &&
+            evento.data >= inicioISO &&
+            evento.data <= fimISO
+        )
         .sort((a, b) => (a.data > b.data ? 1 : -1)),
     [eventos, inicioISO, fimISO]
   );

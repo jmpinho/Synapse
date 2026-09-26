@@ -13,19 +13,9 @@ import {
 import { useTarefaAtiva } from "../../context/TarefaAtivaContext";
 import TarefasKanban from "./TarefasKanban";
 import TarefasMatriz from "./TarefasMatriz";
+import CamposTarefa from "./CamposTarefa";
+import TarefaItemLista from "./TarefaItemLista";
 import "./Tarefas.css";
-
-const ROTULOS_STATUS = {
-  pendente: "Pendente",
-  em_andamento: "Em andamento",
-  concluida: "Concluída",
-};
-
-const ROTULOS_PRIORIDADE = {
-  baixa: "Baixa",
-  media: "Média",
-  alta: "Alta",
-};
 
 function dataDeAmanha() {
   const amanha = new Date();
@@ -98,6 +88,21 @@ export default function Tarefas() {
     setFormularioEdicao((atual) => ({ ...atual, [campo]: valor }));
   }
 
+  // Aplica uma mudança otimista no estado local e desfaz caso a chamada à
+  // API falhe. Usado por salvarEdicao, alterarStatus e excluirTarefa, que
+  // antes repetiam esse mesmo "guarda estado antigo / tenta / reverte".
+  async function atualizarComReversao(atualizarLocal, chamarApi, mensagemErro) {
+    const tarefasAntes = tarefas;
+    atualizarLocal();
+
+    try {
+      await chamarApi();
+    } catch {
+      setErro(mensagemErro);
+      setTarefas(tarefasAntes);
+    }
+  }
+
   async function cadastrarTarefa(evento) {
     evento.preventDefault();
     if (!formulario.titulo.trim() || enviando) return;
@@ -145,41 +150,38 @@ export default function Tarefas() {
       quantidadeConteudo: Number(formularioEdicao.quantidadeConteudo),
     };
 
-    const tarefasAntes = tarefas;
-    setTarefas((atual) =>
-      atual.map((tarefa) =>
-        tarefa.id === id ? { ...tarefa, ...dadosAtualizados } : tarefa
-      )
-    );
     cancelarEdicao();
 
-    try {
-      await atualizarTarefa(id, dadosAtualizados);
-    } catch {
-      setErro("Não foi possível salvar as alterações. Tente novamente.");
-      setTarefas(tarefasAntes);
-    }
+    await atualizarComReversao(
+      () =>
+        setTarefas((atual) =>
+          atual.map((tarefa) =>
+            tarefa.id === id ? { ...tarefa, ...dadosAtualizados } : tarefa
+          )
+        ),
+      () => atualizarTarefa(id, dadosAtualizados),
+      "Não foi possível salvar as alterações. Tente novamente."
+    );
   }
 
   async function alterarStatus(id, novoStatus) {
-    const statusAnterior = tarefas.find((t) => t.id === id)?.status;
-
-    setTarefas((atual) =>
-      atual.map((tarefa) =>
-        tarefa.id === id ? { ...tarefa, status: novoStatus } : tarefa
-      )
-    );
-
-    try {
-      await atualizarTarefa(id, { status: novoStatus });
-    } catch {
-      setErro("Não foi possível salvar o novo status. Tente novamente.");
-      setTarefas((atual) =>
-        atual.map((tarefa) =>
-          tarefa.id === id ? { ...tarefa, status: statusAnterior } : tarefa
-        )
-      );
+    // Se a tarefa marcada como concluída era a que estava em foco no
+    // Pomodoro, ela some do "Estudando agora" — senão o Pomodoro continua
+    // exibindo uma tarefa que já foi encerrada.
+    if (novoStatus === "concluida" && tarefaAtiva?.id === id) {
+      limparTarefaAtiva();
     }
+
+    await atualizarComReversao(
+      () =>
+        setTarefas((atual) =>
+          atual.map((tarefa) =>
+            tarefa.id === id ? { ...tarefa, status: novoStatus } : tarefa
+          )
+        ),
+      () => atualizarTarefa(id, { status: novoStatus }),
+      "Não foi possível salvar o novo status. Tente novamente."
+    );
   }
 
   async function excluirTarefa(id) {
@@ -193,15 +195,11 @@ export default function Tarefas() {
     // uma tarefa que não existe mais.
     if (tarefaAtiva?.id === id) limparTarefaAtiva();
 
-    const tarefasAntes = tarefas;
-    setTarefas((atual) => atual.filter((tarefa) => tarefa.id !== id));
-
-    try {
-      await removerTarefa(id);
-    } catch {
-      setErro("Não foi possível remover a tarefa. Tente novamente.");
-      setTarefas(tarefasAntes);
-    }
+    await atualizarComReversao(
+      () => setTarefas((atual) => atual.filter((tarefa) => tarefa.id !== id)),
+      () => removerTarefa(id),
+      "Não foi possível remover a tarefa. Tente novamente."
+    );
   }
 
   function alternarFoco(tarefa) {
@@ -224,50 +222,7 @@ export default function Tarefas() {
       <form className="tarefas__formulario" onSubmit={cadastrarTarefa}>
         <h2 className="tarefas__titulo-secao">Nova tarefa</h2>
 
-        <label className="tarefas__campo">
-          Descrição
-          <input
-            type="text"
-            placeholder="Ex: Resumo do capítulo 4"
-            value={formulario.titulo}
-            onChange={(e) => atualizarCampo("titulo", e.target.value)}
-            required
-          />
-        </label>
-
-        <label className="tarefas__campo">
-          Data de entrega
-          <input
-            type="date"
-            value={formulario.dataEntrega}
-            onChange={(e) => atualizarCampo("dataEntrega", e.target.value)}
-            required
-          />
-        </label>
-
-        <label className="tarefas__campo">
-          Dificuldade: {formulario.dificuldade}
-          <input
-            type="range"
-            min="1"
-            max="5"
-            value={formulario.dificuldade}
-            onChange={(e) => atualizarCampo("dificuldade", e.target.value)}
-          />
-        </label>
-
-        <label className="tarefas__campo">
-          Quantidade de conteúdo: {formulario.quantidadeConteudo}
-          <input
-            type="range"
-            min="1"
-            max="5"
-            value={formulario.quantidadeConteudo}
-            onChange={(e) =>
-              atualizarCampo("quantidadeConteudo", e.target.value)
-            }
-          />
-        </label>
+        <CamposTarefa valores={formulario} onMudar={atualizarCampo} />
 
         <button
           type="submit"
@@ -344,169 +299,48 @@ export default function Tarefas() {
           tarefasComPrioridade.length > 0 &&
           visualizacao === "lista" && (
             <div className="tarefas__lista">
-              {tarefasComPrioridade.map((tarefa) => {
-                if (tarefa.id === idEmEdicao) {
-                  return (
-                    <form
-                      key={tarefa.id}
-                      className="tarefas__item-edicao"
-                      onSubmit={(e) => salvarEdicao(e, tarefa.id)}
-                    >
-                      <label className="tarefas__campo">
-                        Descrição
-                        <input
-                          type="text"
-                          value={formularioEdicao.titulo}
-                          onChange={(e) =>
-                            atualizarCampoEdicao("titulo", e.target.value)
-                          }
-                          required
-                          autoFocus
-                        />
-                      </label>
-
-                      <label className="tarefas__campo">
-                        Data de entrega
-                        <input
-                          type="date"
-                          value={formularioEdicao.dataEntrega}
-                          onChange={(e) =>
-                            atualizarCampoEdicao("dataEntrega", e.target.value)
-                          }
-                          required
-                        />
-                      </label>
-
-                      <label className="tarefas__campo">
-                        Dificuldade: {formularioEdicao.dificuldade}
-                        <input
-                          type="range"
-                          min="1"
-                          max="5"
-                          value={formularioEdicao.dificuldade}
-                          onChange={(e) =>
-                            atualizarCampoEdicao("dificuldade", e.target.value)
-                          }
-                        />
-                      </label>
-
-                      <label className="tarefas__campo">
-                        Quantidade de conteúdo:{" "}
-                        {formularioEdicao.quantidadeConteudo}
-                        <input
-                          type="range"
-                          min="1"
-                          max="5"
-                          value={formularioEdicao.quantidadeConteudo}
-                          onChange={(e) =>
-                            atualizarCampoEdicao(
-                              "quantidadeConteudo",
-                              e.target.value
-                            )
-                          }
-                        />
-                      </label>
-
-                      <div className="tarefas__acoes-edicao">
-                        <button
-                          type="submit"
-                          className="tarefas__botao-cadastrar"
-                        >
-                          Salvar alterações
-                        </button>
-                        <button
-                          type="button"
-                          className="tarefas__botao-cancelar"
-                          onClick={cancelarEdicao}
-                        >
-                          Cancelar
-                        </button>
-                      </div>
-                    </form>
-                  );
-                }
-
-                return (
-                  <div
+              {tarefasComPrioridade.map((tarefa) =>
+                tarefa.id === idEmEdicao ? (
+                  <form
                     key={tarefa.id}
-                    className={`tarefas__item tarefas__item--${tarefa.status}${
-                      tarefaAtiva?.id === tarefa.id
-                        ? " tarefas__item--ativa"
-                        : ""
-                    }`}
+                    className="tarefas__item-edicao"
+                    onSubmit={(e) => salvarEdicao(e, tarefa.id)}
                   >
-                    <div className="tarefas__item-principal">
-                      <span className="tarefas__item-descricao">
-                        {tarefa.titulo}
-                      </span>
-                      <span className="tarefas__item-data">
-                        Entrega:{" "}
-                        {new Date(
-                          tarefa.dataEntrega + "T00:00:00"
-                        ).toLocaleDateString("pt-BR")}
-                        {minutosPorTarefa[tarefa.id] > 0 &&
-                          ` · ${minutosPorTarefa[tarefa.id]} min estudados`}
-                      </span>
+                    <CamposTarefa
+                      valores={formularioEdicao}
+                      onMudar={atualizarCampoEdicao}
+                      autoFocusPrimeiro
+                    />
+
+                    <div className="tarefas__acoes-edicao">
+                      <button
+                        type="submit"
+                        className="tarefas__botao-cadastrar"
+                      >
+                        Salvar alterações
+                      </button>
+                      <button
+                        type="button"
+                        className="tarefas__botao-cancelar"
+                        onClick={cancelarEdicao}
+                      >
+                        Cancelar
+                      </button>
                     </div>
-
-                    <select
-                      className="tarefas__select-status"
-                      value={tarefa.status}
-                      onChange={(e) => alterarStatus(tarefa.id, e.target.value)}
-                    >
-                      {Object.entries(ROTULOS_STATUS).map(([valor, rotulo]) => (
-                        <option key={valor} value={valor}>
-                          {rotulo}
-                        </option>
-                      ))}
-                    </select>
-
-                    <span
-                      className={`tarefas__badge-prioridade tarefas__badge-prioridade--${tarefa.prioridade.nivel}`}
-                      title={`Pontuação: ${tarefa.prioridade.pontuacao}/10`}
-                    >
-                      {ROTULOS_PRIORIDADE[tarefa.prioridade.nivel]}
-                    </span>
-
-                    <button
-                      type="button"
-                      className={
-                        "tarefas__botao-estudar" +
-                        (tarefaAtiva?.id === tarefa.id
-                          ? " tarefas__botao-estudar--ativa"
-                          : "")
-                      }
-                      onClick={() =>
-                        tarefaAtiva?.id === tarefa.id
-                          ? limparTarefaAtiva()
-                          : definirTarefaAtiva(tarefa)
-                      }
-                    >
-                      {tarefaAtiva?.id === tarefa.id
-                        ? "Estudando agora"
-                        : "Estudar agora"}
-                    </button>
-
-                    <button
-                      type="button"
-                      className="tarefas__botao-editar"
-                      onClick={() => iniciarEdicao(tarefa)}
-                      aria-label="Editar tarefa"
-                    >
-                      ✎
-                    </button>
-
-                    <button
-                      type="button"
-                      className="tarefas__botao-remover"
-                      onClick={() => excluirTarefa(tarefa.id)}
-                      aria-label="Remover tarefa"
-                    >
-                      ✕
-                    </button>
-                  </div>
-                );
-              })}
+                  </form>
+                ) : (
+                  <TarefaItemLista
+                    key={tarefa.id}
+                    tarefa={tarefa}
+                    emFoco={tarefaAtiva?.id === tarefa.id}
+                    minutosEstudados={minutosPorTarefa[tarefa.id]}
+                    onAlterarStatus={alterarStatus}
+                    onEstudar={() => alternarFoco(tarefa)}
+                    onEditar={() => iniciarEdicao(tarefa)}
+                    onExcluir={() => excluirTarefa(tarefa.id)}
+                  />
+                )
+              )}
             </div>
           )}
       </div>
