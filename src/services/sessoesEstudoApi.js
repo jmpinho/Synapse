@@ -1,5 +1,5 @@
 import { collection, getDocs, addDoc } from "firebase/firestore";
-import { db } from "../firebaseConfig";
+import { db } from "./firebaseConfig";
 
 const colecaoSessoes = collection(db, "sessoesEstudo");
 

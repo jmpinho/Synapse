@@ -4,7 +4,7 @@ import {
   criarConteudo,
   deletarConteudo,
 } from "../../services/conteudosApi";
-import "./conteudo.estilo.css";
+import "./Conteudo.css";
 
 export default function Conteudo() {
   const [anotacoes, setAnotacoes] = useState([]);

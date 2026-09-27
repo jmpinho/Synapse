@@ -5,7 +5,7 @@ import {
   deleteDoc,
   doc,
 } from "firebase/firestore";
-import { db } from "../firebaseConfig";
+import { db } from "./firebaseConfig";
 
 const colecaoConteudos = collection(db, "conteudos");
 

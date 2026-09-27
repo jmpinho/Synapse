@@ -14,7 +14,7 @@ import {
   IconeCronograma,
   IconePomodoro,
   IconeConteudo,
-} from "../Sidebar/icons";
+} from "../icons/icons";
 import "./Home.css";
 
 const ROTULOS_TIPO = {

@@ -16,6 +16,7 @@
   width: 100%;
   max-width: 1100px;
   margin-bottom: var(--espaco-lg);
+  text-align: center;
 }
 
 .app__cabecalho h1 {

@@ -6,7 +6,7 @@ import {
   IconeTarefas,
   IconeCronograma,
   IconeProgresso,
-} from "./icons";
+} from "../icons/icons";
 import "./Sidebar.css";
 
 const itensMenu = [
