@@ -27,8 +27,6 @@ export default function Pomodoro() {
   const [rodando, setRodando] = useState(false);
   const [ciclosConcluidos, setCiclosConcluidos] = useState(0);
 
-  // Refs para acessar sempre o valor mais recente dentro do setInterval,
-  // sem precisar recriar o intervalo a cada mudança de estado.
   const fimAlvoRef = useRef(null);
   const tarefaAtivaRef = useRef(tarefaAtiva);
   const ciclosConcluidosRef = useRef(ciclosConcluidos);
@@ -46,7 +44,6 @@ export default function Pomodoro() {
     modoRef.current = modo;
   }, [modo]);
 
-  // Troca de modo e reseta o tempo do modo escolhido
   const trocarModo = (novoModo) => {
     setModo(novoModo);
     setSegundosRestantes(DURACOES_MIN[novoModo] * 60);
@@ -69,12 +66,6 @@ export default function Pomodoro() {
     }
   };
 
-  // Controla o relógio: em vez de contar "quantos ticks já passaram" (o que
-  // quebra quando o navegador limita/atrasa o setInterval em abas em segundo
-  // plano), guardamos o horário real em que o timer deve zerar e, a cada
-  // disparo, recalculamos o tempo restante a partir do relógio do sistema.
-  // Assim, mesmo que o intervalo atrase ou "pule" disparos, o timer sempre
-  // mostra o tempo correto assim que volta a rodar.
   useEffect(() => {
     if (!rodando) {
       fimAlvoRef.current = null;
@@ -95,12 +86,8 @@ export default function Pomodoro() {
       }
     };
 
-    // Checar mais rápido que 1s ajuda a não perder o disparo final por causa
-    // do throttling; o cálculo por timestamp corrige qualquer atraso.
     const intervalo = setInterval(atualizarTempoRestante, 250);
 
-    // Ao voltar para a aba, recalcula na hora em vez de esperar o próximo
-    // tick do intervalo (que pode ter ficado bem atrasado em segundo plano).
     const aoMudarVisibilidade = () => {
       if (document.visibilityState === "visible") {
         atualizarTempoRestante();
@@ -115,7 +102,6 @@ export default function Pomodoro() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rodando]);
 
-  // Ações dos botões
   const alternarTimer = () => setRodando(!rodando);
 
   const reiniciarTimer = () => {
@@ -128,11 +114,9 @@ export default function Pomodoro() {
     trocarModo(novoModo);
   };
 
-  // Formatação de minutos e segundos (MM:SS)
   const minutos = String(Math.floor(segundosRestantes / 60)).padStart(2, "0");
   const segundos = String(segundosRestantes % 60).padStart(2, "0");
 
-  // Cálculo do progresso para o círculo SVG
   const duracaoTotal = DURACOES_MIN[modo] * 60;
   const progresso = 1 - segundosRestantes / duracaoTotal;
   const raio = 100;

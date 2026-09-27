@@ -21,7 +21,6 @@ const itensMenu = [
 export default function Sidebar({ paginaAtiva = "home", aoNavegar, aoSair }) {
   const [modoEscuro, setModoEscuro] = useState(true);
 
-  // Aplica o atributo 'data-theme' no <html> sempre que o tema muda
   useEffect(() => {
     document.documentElement.setAttribute(
       "data-theme",

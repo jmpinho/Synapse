@@ -202,6 +202,23 @@ export default function Tarefas() {
     );
   }
 
+  // quadrante = "fazer" | "planejar" | "delegar" | "eliminar" | null
+  // (null limpa o override e volta a usar calcularQuadranteEisenhower)
+  async function moverQuadrante(id, quadrante) {
+    await atualizarComReversao(
+      () =>
+        setTarefas((atual) =>
+          atual.map((tarefa) =>
+            tarefa.id === id
+              ? { ...tarefa, quadranteManual: quadrante }
+              : tarefa
+          )
+        ),
+      () => atualizarTarefa(id, { quadranteManual: quadrante }),
+      "Não foi possível mover a tarefa de quadrante. Tente novamente."
+    );
+  }
+
   function alternarFoco(tarefa) {
     if (tarefaAtiva?.id === tarefa.id) {
       limparTarefaAtiva();
@@ -292,6 +309,7 @@ export default function Tarefas() {
               minutosPorTarefa={minutosPorTarefa}
               onEstudar={alternarFoco}
               onExcluir={excluirTarefa}
+              onMoverQuadrante={moverQuadrante}
             />
           )}
 

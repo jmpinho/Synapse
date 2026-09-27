@@ -48,6 +48,23 @@
   font-size: 0.72rem;
 }
 
+.tarefas-matriz__seletor-quadrante {
+  width: 100%;
+  background-color: var(--cor-fundo-item);
+  border: 1px solid rgba(123, 134, 240, 0.35);
+  border-radius: 6px;
+  color: var(--cor-texto-secundario);
+  font-size: 0.72rem;
+  padding: 4px 6px;
+  cursor: pointer;
+}
+
+.tarefas-matriz__seletor-quadrante:hover,
+.tarefas-matriz__seletor-quadrante:focus {
+  color: var(--cor-texto-principal);
+  border-color: var(--cor-texto-destaque);
+}
+
 .tarefas-matriz__vazio {
   color: var(--cor-texto-secundario);
   font-size: 0.78rem;

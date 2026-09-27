@@ -14,6 +14,7 @@ export default function TarefaCard({
   onExcluir,
   arrastavel,
   aoComecarArrasto,
+  rodapeExtra,
 }) {
   return (
     <div
@@ -35,6 +36,8 @@ export default function TarefaCard({
         {new Date(tarefa.dataEntrega + "T00:00:00").toLocaleDateString("pt-BR")}
         {minutosEstudados > 0 && ` · ${minutosEstudados} min estudados`}
       </span>
+
+      {rodapeExtra}
 
       <div className="tarefa-card__acoes">
         <button

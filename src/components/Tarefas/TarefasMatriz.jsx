@@ -32,16 +32,23 @@ export default function TarefasMatriz({
   minutosPorTarefa,
   onEstudar,
   onExcluir,
+  onMoverQuadrante,
 }) {
   const tarefasEmAberto = tarefas.filter(
     (tarefa) => tarefa.status !== "concluida"
   );
 
+  // O quadrante manual, quando definido, sempre vence o cálculo automático.
+  // É esse cruzamento que decide em qual coluna a tarefa aparece.
+  function quadranteDaTarefa(tarefa) {
+    return tarefa.quadranteManual || calcularQuadranteEisenhower(tarefa);
+  }
+
   return (
     <div className="tarefas-matriz">
       {QUADRANTES.map((quadrante) => {
         const tarefasDoQuadrante = tarefasEmAberto.filter(
-          (tarefa) => calcularQuadranteEisenhower(tarefa) === quadrante.chave
+          (tarefa) => quadranteDaTarefa(tarefa) === quadrante.chave
         );
 
         return (
@@ -66,6 +73,35 @@ export default function TarefasMatriz({
                 minutosEstudados={minutosPorTarefa[tarefa.id]}
                 onEstudar={() => onEstudar(tarefa)}
                 onExcluir={() => onExcluir(tarefa.id)}
+                rodapeExtra={
+                  <select
+                    className="tarefas-matriz__seletor-quadrante"
+                    value={tarefa.quadranteManual || "automatico"}
+                    onChange={(evento) =>
+                      onMoverQuadrante(
+                        tarefa.id,
+                        evento.target.value === "automatico"
+                          ? null
+                          : evento.target.value
+                      )
+                    }
+                    // Evita que o clique no select dispare o drag/outros
+                    // cliques do card por baixo dele.
+                    onClick={(evento) => evento.stopPropagation()}
+                  >
+                    <option value="automatico">
+                      Automático (prazo/dificuldade)
+                    </option>
+                    {QUADRANTES.map((opcaoQuadrante) => (
+                      <option
+                        key={opcaoQuadrante.chave}
+                        value={opcaoQuadrante.chave}
+                      >
+                        {opcaoQuadrante.titulo}
+                      </option>
+                    ))}
+                  </select>
+                }
               />
             ))}
           </div>
