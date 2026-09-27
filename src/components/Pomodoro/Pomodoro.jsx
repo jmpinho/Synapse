@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTarefaAtiva } from "../../context/TarefaAtivaContext";
 import { registrarSessao } from "../../services/sessoesEstudoApi";
 import "./Pomodoro.css";
@@ -27,47 +27,93 @@ export default function Pomodoro() {
   const [rodando, setRodando] = useState(false);
   const [ciclosConcluidos, setCiclosConcluidos] = useState(0);
 
+  // Refs para acessar sempre o valor mais recente dentro do setInterval,
+  // sem precisar recriar o intervalo a cada mudança de estado.
+  const fimAlvoRef = useRef(null);
+  const tarefaAtivaRef = useRef(tarefaAtiva);
+  const ciclosConcluidosRef = useRef(ciclosConcluidos);
+  const modoRef = useRef(modo);
+
+  useEffect(() => {
+    tarefaAtivaRef.current = tarefaAtiva;
+  }, [tarefaAtiva]);
+
+  useEffect(() => {
+    ciclosConcluidosRef.current = ciclosConcluidos;
+  }, [ciclosConcluidos]);
+
+  useEffect(() => {
+    modoRef.current = modo;
+  }, [modo]);
+
   // Troca de modo e reseta o tempo do modo escolhido
   const trocarModo = (novoModo) => {
     setModo(novoModo);
     setSegundosRestantes(DURACOES_MIN[novoModo] * 60);
   };
 
-  // Controla o relógio
+  const concluirCiclo = () => {
+    if (modoRef.current === "foco") {
+      const novosCiclos = ciclosConcluidosRef.current + 1;
+      setCiclosConcluidos(novosCiclos);
+
+      registrarSessao({
+        tarefaId: tarefaAtivaRef.current?.id ?? null,
+        minutos: DURACOES_MIN.foco,
+      }).catch(() => {});
+
+      const ehDescansoLongo = novosCiclos % FOCOS_ATE_DESCANSO_LONGO === 0;
+      trocarModo(ehDescansoLongo ? "descansoLongo" : "descansoCurto");
+    } else {
+      trocarModo("foco");
+    }
+  };
+
+  // Controla o relógio: em vez de contar "quantos ticks já passaram" (o que
+  // quebra quando o navegador limita/atrasa o setInterval em abas em segundo
+  // plano), guardamos o horário real em que o timer deve zerar e, a cada
+  // disparo, recalculamos o tempo restante a partir do relógio do sistema.
+  // Assim, mesmo que o intervalo atrase ou "pule" disparos, o timer sempre
+  // mostra o tempo correto assim que volta a rodar.
   useEffect(() => {
-    if (!rodando) return;
+    if (!rodando) {
+      fimAlvoRef.current = null;
+      return;
+    }
 
-    const intervalo = setInterval(() => {
-      setSegundosRestantes((tempoAtual) => {
-        if (tempoAtual <= 1) {
-          clearInterval(intervalo);
-          setRodando(false);
+    fimAlvoRef.current = Date.now() + segundosRestantes * 1000;
 
-          // Lógica de trocar de modo direto aqui dentro:
-          if (modo === "foco") {
-            const novosCiclos = ciclosConcluidos + 1;
-            setCiclosConcluidos(novosCiclos);
+    const atualizarTempoRestante = () => {
+      const restante = Math.round((fimAlvoRef.current - Date.now()) / 1000);
 
-            registrarSessao({
-              tarefaId: tarefaAtiva?.id ?? null,
-              minutos: DURACOES_MIN.foco,
-            }).catch(() => {});
+      if (restante <= 0) {
+        setSegundosRestantes(0);
+        setRodando(false);
+        concluirCiclo();
+      } else {
+        setSegundosRestantes(restante);
+      }
+    };
 
-            const ehDescansoLongo =
-              novosCiclos % FOCOS_ATE_DESCANSO_LONGO === 0;
-            trocarModo(ehDescansoLongo ? "descansoLongo" : "descansoCurto");
-          } else {
-            trocarModo("foco");
-          }
+    // Checar mais rápido que 1s ajuda a não perder o disparo final por causa
+    // do throttling; o cálculo por timestamp corrige qualquer atraso.
+    const intervalo = setInterval(atualizarTempoRestante, 250);
 
-          return 0;
-        }
-        return tempoAtual - 1;
-      });
-    }, 1000);
+    // Ao voltar para a aba, recalcula na hora em vez de esperar o próximo
+    // tick do intervalo (que pode ter ficado bem atrasado em segundo plano).
+    const aoMudarVisibilidade = () => {
+      if (document.visibilityState === "visible") {
+        atualizarTempoRestante();
+      }
+    };
+    document.addEventListener("visibilitychange", aoMudarVisibilidade);
 
-    return () => clearInterval(intervalo);
-  }, [rodando, modo, ciclosConcluidos, tarefaAtiva]);
+    return () => {
+      clearInterval(intervalo);
+      document.removeEventListener("visibilitychange", aoMudarVisibilidade);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rodando]);
 
   // Ações dos botões
   const alternarTimer = () => setRodando(!rodando);

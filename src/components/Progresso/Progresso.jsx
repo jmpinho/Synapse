@@ -4,7 +4,7 @@ import { listarSessoes } from "../../services/sessoesEstudoApi";
 import { paraISO } from "../../utils/calendario";
 import "./Progresso.css";
 
-const META_MINUTOS_DIARIOS = 120; // 2h/dia — meta fixa por enquanto
+const META_MINUTOS_DIARIOS = 120;
 
 function obterUltimos7Dias() {
   return Array.from({ length: 7 }, (_, indice) => {
@@ -14,12 +14,6 @@ function obterUltimos7Dias() {
     return data;
   });
 }
-
-/**
- * Conta quantos dias seguidos (contando pra trás a partir de hoje) tiveram
- * pelo menos uma sessão de estudo registrada. Se hoje ainda não teve
- * nenhuma sessão, a sequência já quebra em 0 — simples e direto.
- */
 function calcularSequenciaDeDias(diasComEstudo) {
   let sequencia = 0;
   const cursor = new Date();
