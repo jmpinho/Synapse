@@ -1,21 +1,13 @@
 import { useState, useEffect } from "react";
-import {
-  IconeHome,
-  IconePomodoro,
-  IconeConteudo,
-  IconeTarefas,
-  IconeCronograma,
-  IconeProgresso,
-} from "../icons/icons";
 import "./Sidebar.css";
 
 const itensMenu = [
-  { id: "home", rotulo: "Home", Icone: IconeHome },
-  { id: "pomodoro", rotulo: "Pomodoro", Icone: IconePomodoro },
-  { id: "conteudo", rotulo: "Conteúdo", Icone: IconeConteudo },
-  { id: "tarefas", rotulo: "Tarefas", Icone: IconeTarefas },
-  { id: "progresso", rotulo: "Progresso", Icone: IconeProgresso },
-  { id: "cronograma", rotulo: "Cronograma", Icone: IconeCronograma },
+  { id: "home", rotulo: "Home", Icone: "/icons/house-24.png" },
+  { id: "pomodoro", rotulo: "Pomodoro", Icone: "/icons/clock-24.png" },
+  { id: "conteudo", rotulo: "Conteúdo", Icone: "/icons/book-16-24.png" },
+  { id: "tarefas", rotulo: "Tarefas", Icone: "/icons/task-24.png" },
+  { id: "progresso", rotulo: "Progresso", Icone: "/icons/combo-24.png" },
+  { id: "cronograma", rotulo: "Cronograma", Icone: "/icons/calendar-24.png" },
 ];
 
 export default function Sidebar({ paginaAtiva = "home", aoNavegar, aoSair }) {
@@ -50,7 +42,7 @@ export default function Sidebar({ paginaAtiva = "home", aoNavegar, aoSair }) {
             }
             onClick={() => aoNavegar?.(id)}
           >
-            <Icone />
+            <img src={Icone} alt={rotulo} className="w-5 h-5" />
             <span>{rotulo}</span>
           </button>
         ))}

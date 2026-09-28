@@ -108,7 +108,7 @@
   color: var(--cor-texto-principal);
   font-variant-numeric: tabular-nums;
   padding-top: 30px;
-  margin-bottom: 8px; /* Ajustado de 15px para aproximação do rótulo */
+  margin-bottom: 8px;
 }
 
 .pomodoro__modo-atual {
@@ -116,7 +116,7 @@
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  padding-top: 10%;
+  text-align: center;
 }
 
 .pomodoro__controles {
@@ -142,7 +142,7 @@
 .pomodoro__botao--primario {
   background-color: var(--cor-texto-destaque);
   border-color: var(--cor-texto-destaque);
-  color: #0b0d1b; /* Cor escura adicionada para dar contraste com o fundo claro */
+  color: #0b0d1b;
 }
 
 .pomodoro__botao:hover {
