@@ -43,9 +43,7 @@ export default function Progresso() {
           resSessoes.status === "rejected" ||
           resTarefas.status === "rejected"
         ) {
-          setErro(
-            "Alguns dados de progresso não carregaram. Verifique se a API está rodando."
-          );
+          setErro("Alguns dados de progresso não carregaram. Tente novamente!");
         }
 
         setCarregando(false);
