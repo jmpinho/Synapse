@@ -25,6 +25,36 @@
   cursor: pointer;
 }
 
+.conteudo__botao-salvar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.conteudo button:focus-visible {
+  outline: 2px solid var(--cor-texto-destaque);
+  outline-offset: 2px;
+}
+
+/* ---------- Mensagens de estado ---------- */
+
+.conteudo__erro {
+  background-color: rgba(240, 100, 100, 0.12);
+  color: #f06464;
+  border: 1px solid rgba(240, 100, 100, 0.3);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.conteudo__mensagem {
+  color: var(--cor-texto-secundario);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* ---------- Formulário ---------- */
+
 .conteudo__formulario {
   background-color: var(--cor-fundo-cartao);
   border: 1px solid rgba(123, 134, 240, 0.15);
@@ -36,6 +66,7 @@
 }
 
 .conteudo__formulario input,
+.conteudo__formulario select,
 .conteudo__formulario textarea {
   background-color: var(--cor-fundo-item);
   border: 1px solid rgba(123, 134, 240, 0.2);
@@ -44,26 +75,16 @@
   color: var(--cor-texto-principal);
   font-family: inherit;
 }
-.conteudo__card-acoes {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+
+.conteudo__formulario input:focus,
+.conteudo__formulario select:focus,
+.conteudo__formulario textarea:focus {
+  outline: none;
+  border-color: var(--cor-texto-destaque);
 }
 
-.conteudo__botao-deletar {
-  background: transparent;
-  border: none;
-  color: #ff5555;
-  font-size: 1.2rem;
-  font-weight: bold;
-  cursor: pointer;
-  padding: 0 4px;
-  line-height: 1;
-}
+/* ---------- Filtros ---------- */
 
-.conteudo__botao-deletar:hover {
-  color: #ff2222;
-}
 .conteudo__filtros {
   display: flex;
   gap: 8px;
@@ -85,6 +106,8 @@
   color: var(--cor-texto-destaque);
 }
 
+/* ---------- Cartões ---------- */
+
 .conteudo__grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -99,12 +122,19 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-width: 0;
 }
 
 .conteudo__card-header {
   display: flex;
   justify-content: space-between;
   font-size: 0.75rem;
+}
+
+.conteudo__card-acoes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .conteudo__card-disciplina {
@@ -120,13 +150,18 @@
   color: var(--cor-texto-principal);
   font-size: 1.1rem;
   margin: 0;
+  overflow-wrap: anywhere;
 }
 
+/* pre-wrap preserva as quebras de linha digitadas no campo de texto;
+   overflow-wrap evita que palavras ou links longos estourem o cartão. */
 .conteudo__card-texto {
   color: var(--cor-texto-secundario);
   font-size: 0.9rem;
   margin: 0;
   line-height: 1.4;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 .conteudo__card-link {
@@ -139,4 +174,19 @@
 
 .conteudo__card-link:hover {
   text-decoration: underline;
+}
+
+.conteudo__botao-deletar {
+  background: transparent;
+  border: none;
+  color: #ff5555;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+}
+
+.conteudo__botao-deletar:hover {
+  color: #ff2222;
 }

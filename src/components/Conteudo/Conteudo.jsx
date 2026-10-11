@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   buscarConteudos,
   criarConteudo,
@@ -6,148 +6,211 @@ import {
 } from "../../services/conteudosApi";
 import "./Conteudo.css";
 
+const CATEGORIAS = ["Resumo", "Exercício", "Revisão", "Dúvida"];
+
+function anotacaoVazia() {
+  return {
+    disciplina: "",
+    titulo: "",
+    categoria: CATEGORIAS[0],
+    conteudo: "",
+    linkUtil: "",
+  };
+}
+
+function normalizarLink(link) {
+  const limpo = link.trim();
+  if (!limpo) return "";
+  return /^https?:\/\//i.test(limpo) ? limpo : `https://${limpo}`;
+}
+
 export default function Conteudo() {
   const [anotacoes, setAnotacoes] = useState([]);
   const [carregando, setCarregando] = useState(true);
+  const [erro, setErro] = useState(null);
+  const [enviando, setEnviando] = useState(false);
+
   const [filtroDisciplina, setFiltroDisciplina] = useState("Todas");
 
   const [exibirForm, setExibirForm] = useState(false);
-  const [novaAnotacao, setNovaAnotacao] = useState({
-    disciplina: "",
-    titulo: "",
-    categoria: "Resumo",
-    conteudo: "",
-    linkUtil: "",
-  });
+  const [novaAnotacao, setNovaAnotacao] = useState(anotacaoVazia());
 
   useEffect(() => {
     buscarConteudos()
-      .then((dados) => {
-        setAnotacoes(dados);
-        setCarregando(false);
-      })
-      .catch((erro) => {
-        console.error("Erro ao carregar conteúdos:", erro);
-        setCarregando(false);
-      });
+      .then((dados) => setAnotacoes(dados))
+      .catch(() =>
+        setErro(
+          "Não foi possível carregar as anotações. Verifique sua conexão e recarregue a página."
+        )
+      )
+      .finally(() => setCarregando(false));
   }, []);
 
-  const disciplinas = [
-    "Todas",
-    ...new Set(anotacoes.map((item) => item.disciplina)),
-  ];
+  const disciplinas = useMemo(
+    () => [...new Set(anotacoes.map((item) => item.disciplina))],
+    [anotacoes]
+  );
 
-  const handleSalvar = (e) => {
-    e.preventDefault();
-    if (!novaAnotacao.titulo || !novaAnotacao.disciplina) return;
+  const filtroAtivo = disciplinas.includes(filtroDisciplina)
+    ? filtroDisciplina
+    : "Todas";
 
-    // Formata o link caso o usuário tenha digitado sem http/https
-    let linkFormatado = novaAnotacao.linkUtil.trim();
-    if (
-      linkFormatado &&
-      !linkFormatado.startsWith("http://") &&
-      !linkFormatado.startsWith("https://")
-    ) {
-      linkFormatado = `https://${linkFormatado}`;
+  const anotacoesFiltradas = useMemo(
+    () =>
+      filtroAtivo === "Todas"
+        ? anotacoes
+        : anotacoes.filter((item) => item.disciplina === filtroAtivo),
+    [anotacoes, filtroAtivo]
+  );
+
+  function atualizarCampo(campo, valor) {
+    setNovaAnotacao((atual) => ({ ...atual, [campo]: valor }));
+  }
+
+  async function handleSalvar(evento) {
+    evento.preventDefault();
+
+    const disciplina = novaAnotacao.disciplina.trim();
+    const titulo = novaAnotacao.titulo.trim();
+    if (!disciplina || !titulo || enviando) return;
+
+    setEnviando(true);
+    setErro(null);
+
+    try {
+      const itemSalvo = await criarConteudo({
+        ...novaAnotacao,
+        disciplina,
+        titulo,
+        conteudo: novaAnotacao.conteudo.trim(),
+        linkUtil: normalizarLink(novaAnotacao.linkUtil),
+      });
+
+      setAnotacoes((atual) => [itemSalvo, ...atual]);
+      setNovaAnotacao(anotacaoVazia());
+      setExibirForm(false);
+    } catch {
+      setErro(
+        "Não foi possível salvar a anotação. O texto continua no formulário; tente novamente."
+      );
+    } finally {
+      setEnviando(false);
     }
+  }
 
-    const payload = { ...novaAnotacao, linkUtil: linkFormatado };
+  async function handleDeletar(id) {
+    if (
+      !window.confirm("Excluir esta anotação? Essa ação não pode ser desfeita.")
+    )
+      return;
 
-    criarConteudo(payload)
-      .then((itemSalvo) => {
-        setAnotacoes([itemSalvo, ...anotacoes]);
-        setNovaAnotacao({
-          disciplina: "",
-          titulo: "",
-          categoria: "Resumo",
-          conteudo: "",
-          linkUtil: "",
-        });
-        setExibirForm(false);
-      })
-      .catch((erro) => console.error("Erro ao criar conteúdo:", erro));
-  };
+    setErro(null);
 
-  const handleDeletar = (id) => {
-    deletarConteudo(id)
-      .then(() => {
-        setAnotacoes(anotacoes.filter((item) => item.id !== id));
-      })
-      .catch((erro) => console.error("Erro ao deletar conteúdo:", erro));
-  };
-
-  const anotacoesFiltradas =
-    filtroDisciplina === "Todas"
-      ? anotacoes
-      : anotacoes.filter((item) => item.disciplina === filtroDisciplina);
+    try {
+      await deletarConteudo(id);
+      setAnotacoes((atual) => atual.filter((item) => item.id !== id));
+    } catch {
+      setErro("Não foi possível excluir a anotação. Tente novamente.");
+    }
+  }
 
   return (
     <div className="conteudo">
       <div className="conteudo__cabecalho">
-        <h2>Cadernos e Anotações</h2>
+        <h2>Cadernos e anotações</h2>
         <button
           type="button"
           className="conteudo__botao-novo"
           onClick={() => setExibirForm(!exibirForm)}
         >
-          {exibirForm ? "Fechar Formulário" : "+ Nova Anotação"}
+          {exibirForm ? "Fechar formulário" : "+ Nova anotação"}
         </button>
       </div>
+
+      {erro && (
+        <p className="conteudo__erro" role="alert">
+          {erro}
+        </p>
+      )}
 
       {exibirForm && (
         <form className="conteudo__formulario" onSubmit={handleSalvar}>
           <input
             type="text"
+            list="conteudo-disciplinas"
             placeholder="Disciplina (ex: Cálculo I)"
+            aria-label="Disciplina"
             value={novaAnotacao.disciplina}
-            onChange={(e) =>
-              setNovaAnotacao({ ...novaAnotacao, disciplina: e.target.value })
-            }
+            onChange={(e) => atualizarCampo("disciplina", e.target.value)}
             required
           />
+          {/* Sugere as disciplinas já cadastradas, evitando duplicatas
+              como "Cálculo I" e "Calculo 1" nos filtros. */}
+          <datalist id="conteudo-disciplinas">
+            {disciplinas.map((disciplina) => (
+              <option key={disciplina} value={disciplina} />
+            ))}
+          </datalist>
+
           <input
             type="text"
             placeholder="Título da anotação"
+            aria-label="Título da anotação"
             value={novaAnotacao.titulo}
-            onChange={(e) =>
-              setNovaAnotacao({ ...novaAnotacao, titulo: e.target.value })
-            }
+            onChange={(e) => atualizarCampo("titulo", e.target.value)}
             required
           />
+
+          <select
+            aria-label="Categoria"
+            value={novaAnotacao.categoria}
+            onChange={(e) => atualizarCampo("categoria", e.target.value)}
+          >
+            {CATEGORIAS.map((categoria) => (
+              <option key={categoria} value={categoria}>
+                {categoria}
+              </option>
+            ))}
+          </select>
+
           <textarea
             placeholder="Escreva aqui o conteúdo principal..."
+            aria-label="Conteúdo da anotação"
             value={novaAnotacao.conteudo}
-            onChange={(e) =>
-              setNovaAnotacao({ ...novaAnotacao, conteudo: e.target.value })
-            }
+            onChange={(e) => atualizarCampo("conteudo", e.target.value)}
             rows="3"
           />
+
           <input
             type="text"
             placeholder="Link útil (opcional - ex: www.google.com)"
+            aria-label="Link útil"
             value={novaAnotacao.linkUtil}
-            onChange={(e) =>
-              setNovaAnotacao({ ...novaAnotacao, linkUtil: e.target.value })
-            }
+            onChange={(e) => atualizarCampo("linkUtil", e.target.value)}
           />
-          <button type="submit" className="conteudo__botao-salvar">
-            Salvar Anotação
+
+          <button
+            type="submit"
+            className="conteudo__botao-salvar"
+            disabled={enviando}
+          >
+            {enviando ? "Salvando..." : "Salvar anotação"}
           </button>
         </form>
       )}
 
-      {disciplinas.length > 1 && (
+      {disciplinas.length > 0 && (
         <div className="conteudo__filtros">
-          {disciplinas.map((disc) => (
+          {["Todas", ...disciplinas].map((disciplina) => (
             <button
-              key={disc}
+              key={disciplina}
               type="button"
               className={`conteudo__tag ${
-                filtroDisciplina === disc ? "conteudo__tag--ativa" : ""
+                filtroAtivo === disciplina ? "conteudo__tag--ativa" : ""
               }`}
-              onClick={() => setFiltroDisciplina(disc)}
+              onClick={() => setFiltroDisciplina(disciplina)}
             >
-              {disc}
+              {disciplina}
             </button>
           ))}
         </div>
@@ -156,7 +219,13 @@ export default function Conteudo() {
       {carregando ? (
         <p className="conteudo__mensagem">Carregando anotações...</p>
       ) : anotacoesFiltradas.length === 0 ? (
-        <p className="conteudo__mensagem">Nenhuma anotação encontrada.</p>
+        !erro && (
+          <p className="conteudo__mensagem">
+            {anotacoes.length === 0
+              ? "Nenhuma anotação ainda. Use “Nova anotação” para criar a primeira."
+              : "Nenhuma anotação nesta disciplina."}
+          </p>
+        )
       ) : (
         <div className="conteudo__grid">
           {anotacoesFiltradas.map((item) => (
@@ -173,6 +242,7 @@ export default function Conteudo() {
                     type="button"
                     className="conteudo__botao-deletar"
                     onClick={() => handleDeletar(item.id)}
+                    aria-label="Excluir anotação"
                     title="Excluir anotação"
                   >
                     ×
@@ -188,7 +258,7 @@ export default function Conteudo() {
                   rel="noreferrer"
                   className="conteudo__card-link"
                 >
-                  Abrir Link Útil ↗
+                  Abrir link útil ↗
                 </a>
               )}
             </div>
