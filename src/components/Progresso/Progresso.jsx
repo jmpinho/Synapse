@@ -53,7 +53,6 @@ export default function Progresso() {
 
   const ultimos7Dias = useMemo(() => obterUltimos7Dias(), []);
 
-  // Soma os minutos por dia (chave = data em ISO), a partir das sessões.
   const minutosPorDia = useMemo(() => {
     const totais = {};
     for (const sessao of sessoes) {

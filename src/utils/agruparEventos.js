@@ -1,9 +1,6 @@
 const MS_POR_DIA = 1000 * 60 * 60 * 24;
 
 /**
- * Classifica a situação de um evento em relação à data de hoje.
- * Eventos já concluídos nunca são "atrasado", pra não ficar avisando
- * de algo que o estudante já resolveu.
  *
  * @param {{ data: string, concluido: boolean }} evento
  * @returns {'atrasado' | 'hoje' | 'futuro'}
@@ -21,9 +18,6 @@ export function calcularSituacao({ data, concluido }) {
 }
 
 /**
- * Agrupa e ordena eventos em três blocos para exibição no Cronograma:
- * atrasados primeiro (chamam mais atenção), depois hoje, depois os
- * futuros — cada bloco ordenado da data mais próxima para a mais distante.
  *
  * @param {Array<{data: string, concluido: boolean}>} eventos
  */

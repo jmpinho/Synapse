@@ -48,8 +48,6 @@ export default function Tarefas() {
   const [tarefas, setTarefas] = useState([]);
   const [formulario, setFormulario] = useState(formularioVazio());
 
-  // Quantos minutos já foram estudados de cada tarefa, a partir do
-  // histórico de sessões do Pomodoro. Chave = id da tarefa, valor = minutos.
   const [minutosPorTarefa, setMinutosPorTarefa] = useState({});
 
   const [carregando, setCarregando] = useState(true);
@@ -70,10 +68,6 @@ export default function Tarefas() {
       .finally(() => setCarregando(false));
   }, []);
 
-  // Busca o histórico de sessões de estudo separadamente — se isso
-  // falhar, a tela de tarefas continua funcionando normalmente, só sem
-  // os minutinhos de "já estudado" (por isso não usa o mesmo estado de
-  // erro do carregamento principal).
   useEffect(() => {
     listarSessoes()
       .then((sessoes) => setMinutosPorTarefa(somarMinutosPorTarefa(sessoes)))
@@ -88,9 +82,6 @@ export default function Tarefas() {
     setFormularioEdicao((atual) => ({ ...atual, [campo]: valor }));
   }
 
-  // Aplica uma mudança otimista no estado local e desfaz caso a chamada à
-  // API falhe. Usado por salvarEdicao, alterarStatus e excluirTarefa, que
-  // antes repetiam esse mesmo "guarda estado antigo / tenta / reverte".
   async function atualizarComReversao(atualizarLocal, chamarApi, mensagemErro) {
     const tarefasAntes = tarefas;
     atualizarLocal();
@@ -165,9 +156,6 @@ export default function Tarefas() {
   }
 
   async function alterarStatus(id, novoStatus) {
-    // Se a tarefa marcada como concluída era a que estava em foco no
-    // Pomodoro, ela some do "Estudando agora" — senão o Pomodoro continua
-    // exibindo uma tarefa que já foi encerrada.
     if (novoStatus === "concluida" && tarefaAtiva?.id === id) {
       limparTarefaAtiva();
     }
@@ -190,9 +178,6 @@ export default function Tarefas() {
     )
       return;
 
-    // Se a tarefa removida era a que estava "ativa" no Pomodoro, limpa
-    // essa referência — senão o Pomodoro ficaria mostrando o título de
-    // uma tarefa que não existe mais.
     if (tarefaAtiva?.id === id) limparTarefaAtiva();
 
     await atualizarComReversao(
@@ -201,9 +186,6 @@ export default function Tarefas() {
       "Não foi possível remover a tarefa. Tente novamente."
     );
   }
-
-  // quadrante = "fazer" | "planejar" | "delegar" | "eliminar" | null
-  // (null limpa o override e volta a usar calcularQuadranteEisenhower)
   async function moverQuadrante(id, quadrante) {
     await atualizarComReversao(
       () =>

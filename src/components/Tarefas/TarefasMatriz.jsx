@@ -21,11 +21,6 @@ const QUADRANTES = [
   },
 ];
 
-/**
- * Só mostra tarefas ainda não concluídas — a matriz existe pra ajudar a
- * decidir o que atacar agora, então tarefa concluída não tem o que
- * fazer nela (ela continua aparecendo normalmente no Kanban e na Lista).
- */
 export default function TarefasMatriz({
   tarefas,
   tarefaAtiva,
@@ -38,8 +33,6 @@ export default function TarefasMatriz({
     (tarefa) => tarefa.status !== "concluida"
   );
 
-  // O quadrante manual, quando definido, sempre vence o cálculo automático.
-  // É esse cruzamento que decide em qual coluna a tarefa aparece.
   function quadranteDaTarefa(tarefa) {
     return tarefa.quadranteManual || calcularQuadranteEisenhower(tarefa);
   }
@@ -85,8 +78,6 @@ export default function TarefasMatriz({
                           : evento.target.value
                       )
                     }
-                    // Evita que o clique no select dispare o drag/outros
-                    // cliques do card por baixo dele.
                     onClick={(evento) => evento.stopPropagation()}
                   >
                     <option value="automatico">

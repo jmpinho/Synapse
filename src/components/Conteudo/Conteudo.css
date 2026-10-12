@@ -153,8 +153,6 @@
   overflow-wrap: anywhere;
 }
 
-/* pre-wrap preserva as quebras de linha digitadas no campo de texto;
-   overflow-wrap evita que palavras ou links longos estourem o cartão. */
 .conteudo__card-texto {
   color: var(--cor-texto-secundario);
   font-size: 0.9rem;

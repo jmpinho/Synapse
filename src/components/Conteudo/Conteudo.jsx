@@ -144,8 +144,6 @@ export default function Conteudo() {
             onChange={(e) => atualizarCampo("disciplina", e.target.value)}
             required
           />
-          {/* Sugere as disciplinas já cadastradas, evitando duplicatas
-              como "Cálculo I" e "Calculo 1" nos filtros. */}
           <datalist id="conteudo-disciplinas">
             {disciplinas.map((disciplina) => (
               <option key={disciplina} value={disciplina} />

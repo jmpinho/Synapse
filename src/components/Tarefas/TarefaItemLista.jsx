@@ -10,8 +10,6 @@ const ROTULOS_PRIORIDADE = {
   alta: "Alta",
 };
 
-// Uma linha da visualização em Lista (fora do modo de edição).
-// Extraído de Tarefas.jsx para tirar o JSX de dentro do .map() gigante.
 export default function TarefaItemLista({
   tarefa,
   emFoco,

@@ -1,6 +1,3 @@
-// Campos do formulário de tarefa, compartilhados entre o cadastro (Tarefas.jsx)
-// e a edição inline (também em Tarefas.jsx). Antes os dois formulários
-// repetiam o mesmo JSX; agora só muda o objeto `valores` e o `onMudar`.
 export default function CamposTarefa({ valores, onMudar, autoFocusPrimeiro }) {
   return (
     <>
