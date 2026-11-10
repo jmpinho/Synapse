@@ -1,126 +1,134 @@
 .cronograma {
+  --destaque-rgb: 123 134 240;
+  --perigo-rgb: 240 100 100;
+  --aviso-rgb: 240 168 60;
+  --neutro-rgb: 164 168 209;
+
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr 320px;
-  gap: var(--espaco-lg);
+  grid-template-columns: 1fr;
+  gap: var(--espaco-md);
   align-items: start;
 }
 
-@media (max-width: 900px) {
-  .cronograma {
-    grid-template-columns: 1fr;
-  }
+.cronograma > * {
+  min-width: 0;
 }
 
-/* ---------- Calendário ---------- */
+/* ---------- Cartões (calendário + painel) ---------- */
+
+.cronograma__calendario,
+.cronograma__painel-dia {
+  padding: var(--espaco-md);
+  border-radius: var(--raio-borda);
+  background-color: var(--cor-fundo-cartao);
+}
 
 .cronograma__calendario {
-  background-color: var(--cor-fundo-cartao);
-  border-radius: var(--raio-borda);
-  padding: var(--espaco-lg);
+  container-type: inline-size;
 }
+
+/* ---------- Cabeçalho do calendário ---------- */
 
 .cronograma__cabecalho {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  gap: var(--espaco-sm);
   margin-bottom: var(--espaco-md);
 }
 
 .cronograma__navegacao {
+  flex: 1 1 auto;
   display: flex;
   align-items: center;
   gap: var(--espaco-sm);
 }
 
 .cronograma__mes-ano {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
   color: var(--cor-texto-principal);
   font-size: 1.1rem;
-  margin: 0;
-  min-width: 180px;
   text-align: center;
   text-transform: capitalize;
 }
 
-.cronograma__botao-nav {
-  background: transparent;
-  border: 1px solid rgba(123, 134, 240, 0.25);
+.cronograma__botao-nav,
+.cronograma__botao-hoje {
+  border: 1px solid rgb(var(--destaque-rgb) / 0.25);
   border-radius: 999px;
+  background: transparent;
   color: var(--cor-texto-secundario);
-  width: 32px;
-  height: 32px;
-  font-size: 1.1rem;
-  line-height: 1;
   cursor: pointer;
 }
 
-.cronograma__botao-nav:hover {
-  color: var(--cor-texto-principal);
-  border-color: var(--cor-texto-destaque);
+.cronograma__botao-nav {
+  width: 40px;
+  height: 40px;
+  font-size: 1.1rem;
+  line-height: 1;
 }
 
 .cronograma__botao-hoje {
-  background: transparent;
-  border: 1px solid rgba(123, 134, 240, 0.25);
-  border-radius: 999px;
-  color: var(--cor-texto-secundario);
-  padding: 8px 18px;
+  min-height: 40px;
+  padding: 8px 16px;
   font-size: 0.85rem;
   font-weight: 600;
-  cursor: pointer;
-}
-
-.cronograma__botao-hoje:hover {
-  color: var(--cor-texto-principal);
-  border-color: var(--cor-texto-destaque);
 }
 
 .cronograma__erro {
-  background-color: rgba(240, 100, 100, 0.12);
-  color: #f06464;
-  border: 1px solid rgba(240, 100, 100, 0.3);
-  border-radius: 8px;
-  padding: 10px 14px;
-  font-size: 0.85rem;
   margin: 0 0 var(--espaco-md);
+  padding: 10px 14px;
+  border: 1px solid rgb(var(--perigo-rgb) / 0.3);
+  border-radius: 8px;
+  background-color: rgb(var(--perigo-rgb) / 0.12);
+  color: rgb(var(--perigo-rgb));
+  font-size: 0.85rem;
 }
+
+/* ---------- Grade do calendário ---------- */
 
 .cronograma__grade {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 6px;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
 }
 
 .cronograma__dia-semana {
-  text-align: center;
-  color: var(--cor-texto-secundario);
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  overflow: hidden;
   padding-bottom: 6px;
+  color: var(--cor-texto-secundario);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  text-align: center;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
 }
 
 .cronograma__celula {
-  background-color: var(--cor-fundo-item);
-  border: 1px solid transparent;
-  border-radius: 8px;
-  min-height: 84px;
-  padding: 6px;
+  min-height: 56px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   gap: 4px;
-  cursor: pointer;
+  padding: 4px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background-color: var(--cor-fundo-item);
   font-family: inherit;
   text-align: left;
-}
-
-.cronograma__celula:hover {
-  border-color: rgba(123, 134, 240, 0.35);
+  cursor: pointer;
 }
 
 .cronograma__celula--fora-do-mes {
   opacity: 0.35;
+}
+
+.cronograma__celula--selecionada {
+  border-color: var(--cor-texto-destaque);
 }
 
 .cronograma__celula--hoje .cronograma__numero-dia {
@@ -128,38 +136,39 @@
   color: var(--cor-texto-principal);
 }
 
-.cronograma__celula--selecionada {
-  border-color: var(--cor-texto-destaque);
-}
-
 .cronograma__numero-dia {
-  color: var(--cor-texto-principal);
-  font-size: 0.8rem;
-  font-weight: 600;
   width: 22px;
   height: 22px;
-  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 50%;
+  color: var(--cor-texto-principal);
+  font-size: 0.8rem;
+  font-weight: 600;
 }
 
+/* Chips: no celular viram pontinhos coloridos*/
+
 .cronograma__chips {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
   width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 3px;
 }
 
 .cronograma__chip {
-  font-size: 0.68rem;
-  font-weight: 600;
-  padding: 2px 6px;
-  border-radius: 4px;
-  white-space: nowrap;
+  --badge-rgb: var(--neutro-rgb);
+  width: 6px;
+  height: 6px;
+  padding: 0;
   overflow: hidden;
+  border-radius: 50%;
+  background-color: rgb(var(--badge-rgb));
+  font-size: 0;
+  white-space: nowrap;
   text-overflow: ellipsis;
-  width: 100%;
 }
 
 .cronograma__chip--concluido {
@@ -167,46 +176,47 @@
   text-decoration: line-through;
 }
 
-.cronograma__chip--prova {
-  background-color: rgba(240, 100, 100, 0.18);
-  color: #f06464;
-}
-
-.cronograma__chip--trabalho {
-  background-color: rgba(240, 168, 60, 0.18);
-  color: #f0a83c;
-}
-
-.cronograma__chip--curso {
-  background-color: rgba(123, 134, 240, 0.18);
-  color: #7b86f0;
-}
-
-.cronograma__chip--outro {
-  background-color: rgba(164, 168, 209, 0.18);
-  color: var(--cor-texto-secundario);
-}
-
 .cronograma__chip-mais {
+  display: none;
+  color: var(--cor-texto-secundario);
   font-size: 0.65rem;
+}
+
+/* ---------- Cores por tipo) ---------- */
+
+.cronograma__chip--prova,
+.cronograma__badge-tipo--prova {
+  --badge-rgb: var(--perigo-rgb);
+}
+
+.cronograma__chip--trabalho,
+.cronograma__badge-tipo--trabalho {
+  --badge-rgb: var(--aviso-rgb);
+}
+
+.cronograma__chip--curso,
+.cronograma__badge-tipo--curso {
+  --badge-rgb: var(--destaque-rgb);
+}
+
+.cronograma__chip--outro,
+.cronograma__badge-tipo--outro {
+  --badge-rgb: var(--neutro-rgb);
   color: var(--cor-texto-secundario);
 }
 
 /* ---------- Painel do dia ---------- */
 
 .cronograma__painel-dia {
-  background-color: var(--cor-fundo-cartao);
-  border-radius: var(--raio-borda);
-  padding: var(--espaco-lg);
   display: flex;
   flex-direction: column;
   gap: var(--espaco-md);
 }
 
 .cronograma__titulo-dia {
+  margin: 0;
   color: var(--cor-texto-destaque);
   font-size: 1rem;
-  margin: 0;
   text-transform: capitalize;
 }
 
@@ -216,10 +226,10 @@
 }
 
 .cronograma__lista-dia {
+  max-height: 260px;
   display: flex;
   flex-direction: column;
   gap: var(--espaco-sm);
-  max-height: 260px;
   overflow-y: auto;
 }
 
@@ -241,78 +251,65 @@
 }
 
 .cronograma__checkbox {
-  width: 16px;
-  height: 16px;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
   accent-color: var(--cor-texto-destaque);
   cursor: pointer;
-  flex-shrink: 0;
 }
 
 .cronograma__badge-tipo {
   padding: 4px 10px;
   border-radius: 999px;
+  background-color: rgb(var(--badge-rgb) / 0.15);
+  color: rgb(var(--badge-rgb));
   font-size: 0.7rem;
   font-weight: 700;
   white-space: nowrap;
 }
 
-.cronograma__badge-tipo--prova {
-  background-color: rgba(240, 100, 100, 0.15);
-  color: #f06464;
-}
-
-.cronograma__badge-tipo--trabalho {
-  background-color: rgba(240, 168, 60, 0.15);
-  color: #f0a83c;
-}
-
-.cronograma__badge-tipo--curso {
-  background-color: rgba(123, 134, 240, 0.15);
-  color: #7b86f0;
-}
-
+/* o "outro" mantém o texto na cor secundária (declarada acima) */
 .cronograma__badge-tipo--outro {
-  background-color: rgba(164, 168, 209, 0.15);
   color: var(--cor-texto-secundario);
 }
 
 .cronograma__item-principal {
   flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 2px;
-  min-width: 0;
+}
+
+.cronograma__item-descricao,
+.cronograma__item-observacao {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .cronograma__item-descricao {
   color: var(--cor-texto-principal);
-  font-weight: 600;
   font-size: 0.9rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-weight: 600;
 }
 
 .cronograma__item-observacao {
   color: var(--cor-texto-secundario);
   font-size: 0.78rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .cronograma__botao-remover {
-  background: transparent;
+  flex-shrink: 0;
+  min-width: 40px;
+  min-height: 40px;
+  margin-right: -8px; 
+  padding: 0;
   border: none;
+  background: transparent;
   color: var(--cor-texto-secundario);
   font-size: 0.95rem;
   cursor: pointer;
-  padding: 4px 6px;
-  flex-shrink: 0;
-}
-
-.cronograma__botao-remover:hover {
-  color: #f06464;
 }
 
 /* ---------- Formulário rápido ---------- */
@@ -321,8 +318,8 @@
   display: flex;
   flex-direction: column;
   gap: var(--espaco-sm);
-  border-top: 1px solid rgba(123, 134, 240, 0.15);
   padding-top: var(--espaco-md);
+  border-top: 1px solid rgb(var(--destaque-rgb) / 0.15);
 }
 
 .cronograma__campo {
@@ -333,40 +330,137 @@
   font-size: 0.85rem;
 }
 
-.cronograma__campo input[type="text"],
-.cronograma__campo select {
-  background-color: var(--cor-fundo-item);
+.cronograma__campo :is(input[type="text"], select) {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 9px 10px;
   border: 1px solid transparent;
   border-radius: 8px;
-  padding: 9px 10px;
+  background-color: var(--cor-fundo-item);
   color: var(--cor-texto-principal);
   font-family: inherit;
-  font-size: 0.9rem;
+  font-size: 1rem; 
 }
 
-.cronograma__campo input[type="text"]:focus,
-.cronograma__campo select:focus {
+.cronograma__campo :is(input[type="text"], select):focus {
   outline: none;
   border-color: var(--cor-texto-destaque);
 }
 
 .cronograma__botao-cadastrar {
+  min-height: 44px;
   margin-top: var(--espaco-sm);
   padding: 11px;
   border: none;
   border-radius: 999px;
   background-color: var(--cor-texto-destaque);
   color: var(--cor-texto-principal);
-  font-weight: 600;
   font-size: 0.9rem;
+  font-weight: 600;
   cursor: pointer;
-}
-
-.cronograma__botao-cadastrar:hover {
-  opacity: 0.9;
 }
 
 .cronograma__botao-cadastrar:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+/* ---------- Acessibilidade e hover ---------- */
+
+.cronograma :is(button, .cronograma__celula):focus-visible {
+  outline: 2px solid var(--cor-texto-destaque);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) {
+  .cronograma__celula:hover:not(.cronograma__celula--selecionada) {
+    border-color: rgb(var(--destaque-rgb) / 0.35);
+  }
+
+  .cronograma__botao-nav:hover,
+  .cronograma__botao-hoje:hover {
+    border-color: var(--cor-texto-destaque);
+    color: var(--cor-texto-principal);
+  }
+
+  .cronograma__botao-remover:hover {
+    color: rgb(var(--perigo-rgb));
+  }
+
+  .cronograma__botao-cadastrar:hover {
+    opacity: 0.9;
+  }
+}
+
+/* ---------- Calendário largo o bastante: chips com texto ---------- */
+
+@container (min-width: 480px) {
+  .cronograma__grade {
+    gap: 6px;
+  }
+
+  .cronograma__dia-semana {
+    font-size: 0.75rem;
+  }
+
+  .cronograma__celula {
+    min-height: 84px;
+    align-items: flex-start;
+    padding: 6px;
+  }
+
+  .cronograma__chips {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+  }
+
+  .cronograma__chip {
+    width: 100%;
+    height: auto;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background-color: rgb(var(--badge-rgb) / 0.18);
+    color: rgb(var(--badge-rgb));
+    font-size: 0.68rem;
+    font-weight: 600;
+  }
+
+  .cronograma__chip--outro {
+    color: var(--cor-texto-secundario);
+  }
+
+  .cronograma__chip-mais {
+    display: block;
+  }
+}
+
+/* ---------- ≥ 481px ---------- */
+
+@media (min-width: 481px) {
+  .cronograma {
+    gap: var(--espaco-lg);
+  }
+
+  .cronograma__calendario,
+  .cronograma__painel-dia {
+    padding: var(--espaco-lg);
+  }
+
+  .cronograma__mes-ano {
+    flex: 0 1 auto;
+    min-width: 180px;
+  }
+
+  .cronograma__navegacao {
+    flex: 0 1 auto;
+  }
+}
+
+/* ---------- ≥ 1200px: painel ao lado do calendário ---------- */
+
+@media (min-width: 1200px) {
+  .cronograma {
+    grid-template-columns: 1fr 320px;
+  }
 }

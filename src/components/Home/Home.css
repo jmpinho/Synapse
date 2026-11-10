@@ -1,54 +1,103 @@
 .home {
+  --destaque-rgb: 123 134 240;
+  --perigo-rgb: 240 100 100;
+  --aviso-rgb: 240 168 60;
+  --sucesso-rgb: 122 224 158;
+  --atencao-rgb: 240 200 100;
+  --neutro-rgb: 164 168 209;
+
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: var(--espaco-lg);
 }
-.home__header h1 {
+
+/* ---------- Padrões compartilhados ---------- */
+
+.home__lista,
+.home__cartao,
+.home__estatistica-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.home__banner-foco,
+.home__estatistica-card,
+.home__cartao {
+  background-color: var(--cor-fundo-cartao);
+  border-radius: var(--raio-borda);
+}
+
+.home__banner-foco,
+.home__estatistica-card,
+.home__item,
+.home__cartao-cabecalho {
+  display: flex;
+  align-items: center;
+}
+
+.home__header h1,
+.home__banner-conteudo h3,
+.home__cartao-cabecalho h2 {
   color: var(--cor-texto-destaque);
-  font-size: 2rem;
+}
+
+.home__frase,
+.home__banner-conteudo p,
+.home__estatistica-rotulo,
+.home__item-data,
+.home__vazio {
+  color: var(--cor-texto-secundario);
+}
+
+.home__botao-primario,
+.home__item-data,
+.home__item-titulo,
+.home__badge-tipo,
+.home__badge-prioridade {
+  white-space: nowrap;
+}
+
+/* ---------- Cabeçalho ---------- */
+
+.home__header h1 {
+  font-size: 1.6rem;
   font-weight: 700;
-  margin: 0 0 16px;
+  margin: 0 0 var(--espaco-md);
 }
 
 .home__frase {
-  color: var(--cor-texto-secundario);
   font-style: italic;
   font-size: 0.88rem;
   margin: 4px 0 0;
 }
+
 /* ---------- Banner de Foco / Pomodoro ---------- */
 
 .home__banner-foco {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: stretch;
   gap: var(--espaco-md);
-  flex-wrap: wrap;
-  background-color: var(--cor-fundo-cartao);
-  border: 1px solid rgba(123, 134, 240, 0.15);
-  border-radius: var(--raio-borda);
-  padding: var(--espaco-lg);
+  border: 1px solid rgb(var(--destaque-rgb) / 0.15);
+  padding: var(--espaco-md);
   transition: border-color 0.2s ease;
 }
 
 .home__banner-foco--ativo {
-  border-color: rgba(123, 134, 240, 0.4);
+  border-color: rgb(var(--destaque-rgb) / 0.4);
   background: linear-gradient(
     135deg,
     var(--cor-fundo-cartao) 0%,
-    rgba(123, 134, 240, 0.08) 100%
+    rgb(var(--destaque-rgb) / 0.08) 100%
   );
 }
 
 .home__banner-conteudo h3 {
-  color: var(--cor-texto-destaque);
   font-size: 1.1rem;
-  margin: 6px 0 4px 0;
+  margin: 6px 0 4px;
 }
 
 .home__banner-conteudo p {
-  color: var(--cor-texto-secundario);
   font-size: 0.85rem;
   margin: 0;
 }
@@ -65,70 +114,48 @@
 }
 
 .home__botao-primario {
+  min-height: 44px;
   padding: 10px 20px;
-  border-radius: 999px;
   border: none;
+  border-radius: 999px;
   background-color: var(--cor-texto-destaque);
   color: var(--cor-texto-principal);
   font-weight: 600;
   font-size: 0.88rem;
   cursor: pointer;
-  white-space: nowrap;
   transition: opacity 0.15s ease;
-}
-
-.home__botao-primario:hover {
-  opacity: 0.9;
 }
 
 /* ---------- Estatísticas (KPI Cards) ---------- */
 
 .home__estatisticas {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 1fr;
   gap: var(--espaco-md);
-}
-
-@media (max-width: 850px) {
-  .home__estatisticas {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 480px) {
-  .home__estatisticas {
-    grid-template-columns: 1fr;
-  }
 }
 
 .home__estatistica-card {
-  background-color: var(--cor-fundo-cartao);
-  border-radius: var(--raio-borda);
-  padding: var(--espaco-md) var(--espaco-lg);
-  display: flex;
-  align-items: center;
   gap: var(--espaco-md);
+  padding: var(--espaco-md);
 }
 
 .home__estatistica-card--destaque {
-  border: 1px solid rgba(123, 134, 240, 0.3);
+  border: 1px solid rgb(var(--destaque-rgb) / 0.3);
 }
 
 .home__estatistica-icone {
-  color: var(--cor-texto-destaque);
-  background-color: var(--cor-fundo-item);
-  width: 42px;
-  height: 42px;
-  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background-color: var(--cor-fundo-item);
+  color: var(--cor-texto-destaque);
 }
 
 .home__estatistica-info {
-  display: flex;
-  flex-direction: column;
   gap: 2px;
 }
 
@@ -140,7 +167,6 @@
 }
 
 .home__estatistica-rotulo {
-  color: var(--cor-texto-secundario);
   font-size: 0.8rem;
 }
 
@@ -148,39 +174,28 @@
 
 .home__grade {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: var(--espaco-lg);
 }
 
-@media (max-width: 900px) {
-  .home__grade {
-    grid-template-columns: 1fr;
-  }
-}
-
 .home__cartao {
-  background-color: var(--cor-fundo-cartao);
-  border-radius: var(--raio-borda);
-  padding: var(--espaco-lg);
-  display: flex;
-  flex-direction: column;
   gap: var(--espaco-sm);
+  padding: var(--espaco-md);
 }
 
 .home__cartao-cabecalho {
-  display: flex;
-  align-items: center;
   justify-content: space-between;
   margin-bottom: 4px;
 }
 
 .home__cartao-cabecalho h2 {
-  color: var(--cor-texto-destaque);
   font-size: 1.05rem;
   margin: 0;
 }
 
 .home__botao-ver-tudo {
+  min-height: 44px;
+  padding: 0 4px;
   background: transparent;
   border: none;
   color: var(--cor-texto-secundario);
@@ -190,19 +205,11 @@
   transition: color 0.15s ease;
 }
 
-.home__botao-ver-tudo:hover {
-  color: var(--cor-texto-destaque);
-}
-
 .home__lista {
-  display: flex;
-  flex-direction: column;
   gap: var(--espaco-sm);
 }
 
 .home__item {
-  display: flex;
-  align-items: center;
   gap: var(--espaco-sm);
   padding: 10px 12px;
   border-radius: 10px;
@@ -210,87 +217,122 @@
   transition: filter 0.15s ease;
 }
 
-.home__item:hover {
-  filter: brightness(1.05);
-}
-
 .home__item-titulo {
   flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
   color: var(--cor-texto-principal);
   font-weight: 600;
   font-size: 0.88rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .home__item-data {
-  color: var(--cor-texto-secundario);
   font-size: 0.78rem;
-  white-space: nowrap;
 }
-
-/* Badges — cores fixas de propósito: são categorias (tipo de evento,
-   nível de prioridade), não elementos de UI, então mantêm a mesma cor
-   nos dois temas, igual ao Cronograma já faz */
 
 .home__badge-tipo,
 .home__badge-prioridade {
   padding: 4px 10px;
   border-radius: 999px;
+  background-color: rgb(var(--badge-rgb) / 0.15);
+  color: rgb(var(--badge-rgb));
   font-size: 0.7rem;
   font-weight: 700;
-  white-space: nowrap;
 }
 
-.home__badge-tipo--prova {
-  background-color: rgba(240, 100, 100, 0.15);
-  color: #f06464;
+.home__badge-tipo--prova,
+.home__badge-prioridade--alta {
+  --badge-rgb: var(--perigo-rgb);
 }
 
 .home__badge-tipo--trabalho {
-  background-color: rgba(240, 168, 60, 0.15);
-  color: #f0a83c;
+  --badge-rgb: var(--aviso-rgb);
 }
 
 .home__badge-tipo--curso {
-  background-color: rgba(123, 134, 240, 0.15);
-  color: #7b86f0;
+  --badge-rgb: var(--destaque-rgb);
 }
 
 .home__badge-tipo--outro {
-  background-color: rgba(164, 168, 209, 0.15);
+  --badge-rgb: var(--neutro-rgb);
   color: var(--cor-texto-secundario);
 }
 
 .home__badge-prioridade--baixa {
-  background-color: rgba(122, 224, 158, 0.15);
-  color: #7ae09e;
+  --badge-rgb: var(--sucesso-rgb);
 }
 
 .home__badge-prioridade--media {
-  background-color: rgba(240, 200, 100, 0.15);
-  color: #f0c864;
-}
-
-.home__badge-prioridade--alta {
-  background-color: rgba(240, 100, 100, 0.15);
-  color: #f06464;
+  --badge-rgb: var(--atencao-rgb);
 }
 
 /* ---------- Mensagens de estado ---------- */
 
 .home__erro {
-  background-color: rgba(240, 100, 100, 0.12);
-  color: #f06464;
-  border: 1px solid rgba(240, 100, 100, 0.3);
-  border-radius: 8px;
   padding: 10px 14px;
+  border: 1px solid rgb(var(--perigo-rgb) / 0.3);
+  border-radius: 8px;
+  background-color: rgb(var(--perigo-rgb) / 0.12);
+  color: rgb(var(--perigo-rgb));
   font-size: 0.85rem;
 }
 
 .home__vazio {
-  color: var(--cor-texto-secundario);
   font-size: 0.88rem;
   margin: 0;
+}
+
+/* ---------- Hover só onde existe mouse (evita "hover preso" no toque) ---------- */
+
+@media (hover: hover) {
+  .home__botao-primario:hover {
+    opacity: 0.9;
+  }
+  .home__botao-ver-tudo:hover {
+    color: var(--cor-texto-destaque);
+  }
+  .home__item:hover {
+    filter: brightness(1.05);
+  }
+}
+
+/* ---------- ≥ 481px: celular grande / tablet pequeno ---------- */
+
+@media (min-width: 481px) {
+  .home__header h1 {
+    font-size: 2rem;
+  }
+
+  .home__banner-foco {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: var(--espaco-lg);
+  }
+
+  .home__estatisticas {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .home__estatistica-card {
+    padding: var(--espaco-md) var(--espaco-lg);
+  }
+
+  .home__cartao {
+    padding: var(--espaco-lg);
+  }
+}
+
+/* ---------- ≥ 901px: desktop ---------- */
+
+@media (min-width: 901px) {
+  .home__estatisticas {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .home__grade {
+    grid-template-columns: 1fr 1fr;
+  }
 }
