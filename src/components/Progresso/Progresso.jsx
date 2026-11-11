@@ -56,7 +56,7 @@ export default function Progresso() {
   const minutosPorDia = useMemo(() => {
     const totais = {};
     for (const sessao of sessoes) {
-      const dia = sessao.concluidaEm.slice(0, 10);
+      const dia = paraISO(new Date(sessao.concluidaEm));
       totais[dia] = (totais[dia] ?? 0) + sessao.minutos;
     }
     return totais;

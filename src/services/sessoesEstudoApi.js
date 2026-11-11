@@ -1,5 +1,6 @@
 import { collection, getDocs, addDoc } from "firebase/firestore";
 import { db } from "./firebaseConfig";
+import { paraISO } from "../utils/calendario";
 
 const colecaoSessoes = collection(db, "sessoesEstudo");
 
@@ -30,6 +31,6 @@ export function somarMinutosPorTarefa(sessoes) {
 
 export function somarMinutosDoDia(sessoes, diaISO) {
   return sessoes
-    .filter((sessao) => sessao.concluidaEm.slice(0, 10) === diaISO)
+    .filter((sessao) => paraISO(new Date(sessao.concluidaEm)) === diaISO)
     .reduce((total, sessao) => total + sessao.minutos, 0);
 }
