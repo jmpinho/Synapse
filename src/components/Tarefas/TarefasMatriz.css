@@ -1,36 +1,40 @@
 .tarefas-matriz {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--espaco-md);
-}
+  --destaque-rgb: 123 134 240;
+  --perigo-rgb: 240 100 100;
+  --sucesso-rgb: 122 224 158;
+  --atencao-rgb: 240 200 100;
 
-@media (max-width: 700px) {
-  .tarefas-matriz {
-    grid-template-columns: 1fr;
-  }
+  --gap-matriz: var(--espaco-md);
+
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, max(240px, calc((100% - var(--gap-matriz)) / 2))), 1fr)
+  );
+  gap: var(--gap-matriz);
 }
 
 .tarefas-matriz__quadrante {
-  background-color: var(--cor-fundo-item);
-  border-radius: var(--raio-borda);
+  --quadrante-cor: transparent;
+
+  min-width: 0;
   padding: var(--espaco-md);
-  border-top: 3px solid transparent;
+  border-top: 3px solid var(--quadrante-cor);
+  border-radius: var(--raio-borda);
+  background-color: var(--cor-fundo-item);
 }
 
 .tarefas-matriz__quadrante--fazer {
-  border-top-color: #f06464;
+  --quadrante-cor: rgb(var(--perigo-rgb));
 }
-
 .tarefas-matriz__quadrante--planejar {
-  border-top-color: #7ae09e;
+  --quadrante-cor: rgb(var(--sucesso-rgb));
 }
-
 .tarefas-matriz__quadrante--delegar {
-  border-top-color: #f0c864;
+  --quadrante-cor: rgb(var(--atencao-rgb));
 }
-
 .tarefas-matriz__quadrante--eliminar {
-  border-top-color: var(--cor-texto-secundario);
+  --quadrante-cor: var(--cor-texto-secundario);
 }
 
 .tarefas-matriz__cabecalho-quadrante {
@@ -38,9 +42,9 @@
 }
 
 .tarefas-matriz__cabecalho-quadrante h3 {
+  margin: 0;
   color: var(--cor-texto-principal);
   font-size: 0.92rem;
-  margin: 0;
 }
 
 .tarefas-matriz__cabecalho-quadrante span {
@@ -50,26 +54,40 @@
 
 .tarefas-matriz__seletor-quadrante {
   width: 100%;
-  background-color: var(--cor-fundo-item);
-  border: 1px solid rgba(123, 134, 240, 0.35);
+  padding: 4px 6px;
+  border: 1px solid rgb(var(--destaque-rgb) / 0.35);
   border-radius: 6px;
+  background-color: var(--cor-fundo-item);
   color: var(--cor-texto-secundario);
   font-size: 0.72rem;
-  padding: 4px 6px;
   cursor: pointer;
 }
 
-.tarefas-matriz__seletor-quadrante:hover,
-.tarefas-matriz__seletor-quadrante:focus {
-  color: var(--cor-texto-principal);
+.tarefas-matriz__seletor-quadrante:focus-visible {
+  outline: 2px solid var(--cor-texto-destaque);
+  outline-offset: 2px;
   border-color: var(--cor-texto-destaque);
+  color: var(--cor-texto-principal);
 }
 
 .tarefas-matriz__vazio {
+  padding: var(--espaco-md);
+  border: 1px dashed rgb(var(--destaque-rgb) / 0.2);
+  border-radius: 8px;
   color: var(--cor-texto-secundario);
   font-size: 0.78rem;
-  border: 1px dashed rgba(123, 134, 240, 0.2);
-  border-radius: 8px;
-  padding: var(--espaco-md);
   text-align: center;
+}
+@media (pointer: coarse) {
+  .tarefas-matriz__seletor-quadrante {
+    min-height: 40px;
+    font-size: 1rem;
+  }
+}
+
+@media (hover: hover) {
+  .tarefas-matriz__seletor-quadrante:hover {
+    border-color: var(--cor-texto-destaque);
+    color: var(--cor-texto-principal);
+  }
 }
