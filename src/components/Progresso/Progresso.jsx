@@ -18,6 +18,9 @@ function calcularSequenciaDeDias(diasComEstudo) {
   let sequencia = 0;
   const cursor = new Date();
   cursor.setHours(0, 0, 0, 0);
+  if (!diasComEstudo.has(paraISO(cursor))) {
+    cursor.setDate(cursor.getDate() - 1);
+  }
 
   while (diasComEstudo.has(paraISO(cursor))) {
     sequencia += 1;

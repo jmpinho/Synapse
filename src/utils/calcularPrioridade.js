@@ -18,7 +18,7 @@ function calcularNotaUrgencia(dataEntrega) {
 
   const diasRestantes = Math.round((entrega - hoje) / MS_POR_DIA);
 
-  const JANELA_DIAS = 10; // a partir de quantos dias a urgência já é zero
+  const JANELA_DIAS = 10;
   const nota = 10 - (diasRestantes / JANELA_DIAS) * 10;
 
   return Math.max(0, Math.min(10, nota));

@@ -6,11 +6,23 @@ import Tarefas from "./components/Tarefas/Tarefas";
 import Conteudo from "./components/Conteudo/Conteudo";
 import Cronograma from "./components/Cronograma/Cronograma";
 import Progresso from "./components/Progresso/Progresso";
+import Landing from "./components/Landing/Landing";
 import "./styles/theme.css";
 import "./App.css";
 
 export default function App() {
   const [paginaAtiva, setPaginaAtiva] = useState("home");
+  // A landing é a primeira tela; "Começar a estudar" abre o sistema (sem login por enquanto)
+  const [naLanding, setNaLanding] = useState(true);
+
+  function entrarNoApp() {
+    window.scrollTo(0, 0);
+    setNaLanding(false);
+  }
+
+  if (naLanding) {
+    return <Landing aoEntrar={entrarNoApp} />;
+  }
 
   return (
     <div className="app">
