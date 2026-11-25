@@ -1,9 +1,12 @@
 import { initializeApp } from "firebase/app";
 import {
+  collection,
+  doc,
   initializeFirestore,
   persistentLocalCache,
   persistentMultipleTabManager,
 } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -22,3 +25,22 @@ export const db = initializeFirestore(app, {
     tabManager: persistentMultipleTabManager(),
   }),
 });
+
+// Autenticação (login por e-mail/senha e Google)
+export const auth = getAuth(app);
+
+// Cada usuário tem os próprios dados em usuarios/{uid}/<coleção>.
+// Só é chamado com alguém logado (o App só mostra as páginas após o login).
+function uidAtual() {
+  const usuario = auth.currentUser;
+  if (!usuario) throw new Error("Nenhum usuário logado.");
+  return usuario.uid;
+}
+
+export function colecaoDoUsuario(nome) {
+  return collection(db, "usuarios", uidAtual(), nome);
+}
+
+export function documentoDoUsuario(nome, id) {
+  return doc(db, "usuarios", uidAtual(), nome, id);
+}

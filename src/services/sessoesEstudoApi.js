@@ -1,8 +1,8 @@
-import { collection, getDocs, addDoc } from "firebase/firestore";
-import { db } from "./firebaseConfig";
+import { getDocs, addDoc } from "firebase/firestore";
+import { colecaoDoUsuario } from "./firebaseConfig";
 import { paraISO } from "../utils/calendario";
 
-const colecaoSessoes = collection(db, "sessoesEstudo");
+const colecaoSessoes = () => colecaoDoUsuario("sessoesEstudo");
 
 export async function registrarSessao({ tarefaId, minutos }) {
   const dadosSessao = {
@@ -10,12 +10,12 @@ export async function registrarSessao({ tarefaId, minutos }) {
     minutos,
     concluidaEm: new Date().toISOString(),
   };
-  const referencia = await addDoc(colecaoSessoes, dadosSessao);
+  const referencia = await addDoc(colecaoSessoes(), dadosSessao);
   return { id: referencia.id, ...dadosSessao };
 }
 
 export async function listarSessoes() {
-  const snapshot = await getDocs(colecaoSessoes);
+  const snapshot = await getDocs(colecaoSessoes());
   return snapshot.docs.map((documento) => ({
     id: documento.id,
     ...documento.data(),

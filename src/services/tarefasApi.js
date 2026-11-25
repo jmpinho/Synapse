@@ -1,17 +1,15 @@
 import {
-  collection,
   getDocs,
   addDoc,
   updateDoc,
   deleteDoc,
-  doc,
 } from "firebase/firestore";
-import { db } from "./firebaseConfig";
+import { colecaoDoUsuario, documentoDoUsuario } from "./firebaseConfig";
 
-const colecaoTarefas = collection(db, "tarefas");
+const colecaoTarefas = () => colecaoDoUsuario("tarefas");
 
 export async function listarTarefas() {
-  const snapshot = await getDocs(colecaoTarefas);
+  const snapshot = await getDocs(colecaoTarefas());
   return snapshot.docs.map((documento) => ({
     id: documento.id,
     ...documento.data(),
@@ -19,14 +17,14 @@ export async function listarTarefas() {
 }
 
 export async function criarTarefa(dadosTarefa) {
-  const referencia = await addDoc(colecaoTarefas, dadosTarefa);
+  const referencia = await addDoc(colecaoTarefas(), dadosTarefa);
   return { id: referencia.id, ...dadosTarefa };
 }
 
 export function atualizarTarefa(id, camposParaAtualizar) {
-  return updateDoc(doc(db, "tarefas", id), camposParaAtualizar);
+  return updateDoc(documentoDoUsuario("tarefas", id), camposParaAtualizar);
 }
 
 export function removerTarefa(id) {
-  return deleteDoc(doc(db, "tarefas", id));
+  return deleteDoc(documentoDoUsuario("tarefas", id));
 }

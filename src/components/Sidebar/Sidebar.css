@@ -129,6 +129,49 @@
   background-color: var(--cor-texto-principal);
 }
 
+/* Conta conectada: no celular só o avatar, no desktop avatar + nome + e-mail */
+
+.sidebar__conta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 2px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--cor-texto-principal);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sidebar__conta:focus-visible {
+  outline: 2px solid var(--cor-texto-destaque);
+  outline-offset: 2px;
+}
+
+.sidebar__avatar {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--cor-texto-destaque);
+  color: #ffffff;
+  font-weight: 600;
+  object-fit: cover;
+}
+
+.sidebar__conta--ativa .sidebar__avatar {
+  box-shadow: 0 0 0 2px var(--cor-fundo-sidebar), 0 0 0 4px var(--cor-texto-destaque);
+}
+
+.sidebar__conta-textos {
+  display: none;
+}
+
 /* Hover só onde existe mouse */
 
 @media (hover: hover) {
@@ -199,6 +242,44 @@
     width: 100%;
     padding: 12px;
     font-size: 1rem;
+  }
+
+  .sidebar__conta {
+    width: 100%;
+    padding: 10px;
+    border-radius: var(--raio-borda);
+  }
+
+  .sidebar__conta:hover,
+  .sidebar__conta--ativa {
+    background-color: var(--cor-hover);
+  }
+
+  .sidebar__conta--ativa .sidebar__avatar {
+    box-shadow: none;
+  }
+
+  .sidebar__conta-textos {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .sidebar__conta-nome,
+  .sidebar__conta-email {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .sidebar__conta-nome {
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  .sidebar__conta-email {
+    color: var(--cor-texto-secundario);
+    font-size: 0.75rem;
   }
 
   .sidebar__toggle-tema {

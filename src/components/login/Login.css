@@ -1,0 +1,335 @@
+/* ==========================================================================
+   Tela de login / cadastro (BEM com prefixo "login")
+   Sempre escura, como a landing: usa a paleta escura do theme.css.
+   ========================================================================== */
+
+.login {
+  --fundo: #0d0d26;
+  --fundo-cartao: #101030;
+  --fundo-item: #1b1b48;
+  --borda: #2b2b63;
+  --texto: #ffffff;
+  --texto-sec: #a4a8d1;
+  --destaque: #7b86f0;
+  --violeta: #a58bfa;
+  --rosa: #f08bd0;
+
+  position: relative;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 24px 16px;
+  overflow: hidden;
+  background: var(--fundo);
+  color: var(--texto);
+  font-family: "Poppins", "Segoe UI", sans-serif;
+}
+
+/* Manchas de luz desfocadas no fundo (equivalente ao degradê do exemplo) */
+.login__brilho {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.login__brilho--1 {
+  width: 520px;
+  height: 520px;
+  top: -160px;
+  left: -140px;
+  background: var(--destaque);
+}
+
+.login__brilho--2 {
+  width: 460px;
+  height: 460px;
+  top: -120px;
+  right: -160px;
+  background: var(--violeta);
+  opacity: 0.4;
+}
+
+.login__brilho--3 {
+  width: 520px;
+  height: 520px;
+  bottom: -220px;
+  right: 10%;
+  background: var(--rosa);
+  opacity: 0.3;
+}
+
+/* ---------- Cartão ---------- */
+
+.login__cartao {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 400px;
+  padding: 32px 28px 24px;
+  border: 1px solid var(--borda);
+  border-radius: 20px;
+  background: rgba(16, 16, 48, 0.85);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  text-align: center;
+}
+
+.login__logo {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 1.6rem;
+  font-weight: 700;
+  user-select: none;
+}
+
+.login__logo-y {
+  color: var(--destaque);
+}
+
+.login__logo-estrela {
+  width: 34px;
+  height: 34px;
+  margin-left: 6px;
+  transform: rotate(145deg);
+}
+
+.login__titulo {
+  margin: 0 0 4px;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.login__subtitulo {
+  margin: 0 0 24px;
+  color: var(--texto-sec);
+  font-size: 0.88rem;
+}
+
+/* ---------- Formulário ---------- */
+
+.login__form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-align: left;
+}
+
+.login__campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.login__campo input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid var(--borda);
+  border-radius: 10px;
+  background: var(--fundo-item);
+  color: var(--texto);
+  font-weight: 400;
+  font-size: 0.92rem;
+  font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.login__campo input::placeholder {
+  color: #6f73a3;
+}
+
+.login__campo input:focus {
+  outline: none;
+  border-color: var(--destaque);
+  box-shadow: 0 0 0 3px rgba(123, 134, 240, 0.25);
+}
+
+.login__senha {
+  position: relative;
+}
+
+.login__senha input {
+  padding-right: 78px;
+}
+
+.login__ver-senha {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  padding: 4px 8px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--destaque);
+  font-weight: 500;
+  font-size: 0.78rem;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.login__ver-senha:hover {
+  background: rgba(123, 134, 240, 0.12);
+}
+
+.login__lembrar {
+  display: inline-flex;
+  align-items: center;
+  align-self: center;
+  gap: 8px;
+  color: var(--texto-sec);
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.login__lembrar input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--destaque);
+  cursor: pointer;
+}
+
+.login__mensagem {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+.login__mensagem--erro {
+  background: rgba(240, 100, 120, 0.12);
+  color: #ff9aaa;
+}
+
+.login__mensagem--ok {
+  background: rgba(122, 224, 158, 0.12);
+  color: #7ae09e;
+}
+
+/* ---------- Botões ---------- */
+
+.login__botao,
+.login__botao-google {
+  width: 100%;
+  min-height: 44px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s, background-color 0.2s;
+}
+
+.login__botao {
+  margin-top: 4px;
+  border: none;
+  background: var(--violeta);
+  color: #ffffff;
+}
+
+.login__botao:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.login__botao-google {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1px solid var(--borda);
+  background: transparent;
+  color: var(--texto);
+}
+
+.login__botao-google:hover:not(:disabled) {
+  background: var(--fundo-item);
+}
+
+.login__botao:active:not(:disabled),
+.login__botao-google:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.login__botao:disabled,
+.login__botao-google:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.login__divisor {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0;
+  color: var(--texto-sec);
+  font-size: 0.78rem;
+}
+
+.login__divisor::before,
+.login__divisor::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--borda);
+}
+
+/* ---------- Links ---------- */
+
+.login__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.login__links:has(> :only-child) {
+  justify-content: center;
+}
+
+.login__links button,
+.login__voltar {
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--texto-sec);
+  font-weight: 400;
+  font-size: 0.8rem;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.login__links button:hover,
+.login__voltar:hover {
+  color: var(--texto);
+}
+
+.login__links strong {
+  color: var(--destaque);
+  font-weight: 600;
+}
+
+.login__voltar {
+  margin-top: 18px;
+}
+
+.login :focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+@media (max-width: 420px) {
+  .login__cartao {
+    padding: 28px 20px 20px;
+  }
+
+  .login__links {
+    flex-direction: column;
+    align-items: center;
+  }
+}

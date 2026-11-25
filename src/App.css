@@ -68,3 +68,11 @@
     margin-bottom: var(--espaco-lg);
   }
 }
+
+/* Enquanto o Firebase verifica se há sessão salva */
+.app__carregando {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  color: var(--cor-texto-secundario);
+}

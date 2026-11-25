@@ -132,7 +132,7 @@ export default function Home({ aoNavegar }) {
   return (
     <div className="home">
       <header className="home__header">
-        <p className="home__frase">💡 {fraseDoDia}</p>
+        <p className="home__frase"> {fraseDoDia}</p>
       </header>
 
       {/* Banner de Foco / Pomodoro */}
@@ -235,7 +235,7 @@ export default function Home({ aoNavegar }) {
           </div>
 
           {!carregando && eventosDaSemana.length === 0 && (
-            <p className="home__vazio">Nada marcado pros próximos 7 dias. ✨</p>
+            <p className="home__vazio">Nada marcado pros próximos 7 dias</p>
           )}
 
           <div className="home__lista">
@@ -271,7 +271,7 @@ export default function Home({ aoNavegar }) {
           </div>
 
           {!carregando && tarefasAbertas.length === 0 && (
-            <p className="home__vazio">Nenhuma tarefa pendente. 🎉</p>
+            <p className="home__vazio">Nenhuma tarefa pendente</p>
           )}
 
           <div className="home__lista">

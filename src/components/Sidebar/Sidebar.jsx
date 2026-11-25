@@ -10,8 +10,9 @@ const itensMenu = [
   { id: "cronograma", rotulo: "Cronograma", Icone: "/icons/calendar-24.png" },
 ];
 
-export default function Sidebar({ paginaAtiva = "home", aoNavegar, aoSair }) {
+export default function Sidebar({ paginaAtiva = "home", aoNavegar, aoSair, usuario }) {
   const [modoEscuro, setModoEscuro] = useState(true);
+  const nome = usuario?.displayName || usuario?.email?.split("@")[0] || "Estudante";
 
   useEffect(() => {
     document.documentElement.setAttribute(
@@ -49,6 +50,35 @@ export default function Sidebar({ paginaAtiva = "home", aoNavegar, aoSair }) {
       </nav>
 
       <div className="sidebar__rodape">
+        {/* Conta conectada: abre a página "Minha conta" */}
+        <button
+          type="button"
+          className={
+            "sidebar__conta" +
+            (paginaAtiva === "conta" ? " sidebar__conta--ativa" : "")
+          }
+          onClick={() => aoNavegar?.("conta")}
+          aria-label={`Minha conta: ${nome}`}
+          title="Minha conta"
+        >
+          {usuario?.photoURL ? (
+            <img
+              className="sidebar__avatar"
+              src={usuario.photoURL}
+              alt=""
+              referrerPolicy="no-referrer"
+            />
+          ) : (
+            <span className="sidebar__avatar" aria-hidden="true">
+              {nome.charAt(0).toUpperCase()}
+            </span>
+          )}
+          <span className="sidebar__conta-textos">
+            <span className="sidebar__conta-nome">{nome}</span>
+            <span className="sidebar__conta-email">{usuario?.email}</span>
+          </span>
+        </button>
+
         <button type="button" className="sidebar__botao-sair" onClick={aoSair}>
           Sair
         </button>

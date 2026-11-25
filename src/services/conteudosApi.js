@@ -1,16 +1,14 @@
 import {
-  collection,
   getDocs,
   addDoc,
   deleteDoc,
-  doc,
 } from "firebase/firestore";
-import { db } from "./firebaseConfig";
+import { colecaoDoUsuario, documentoDoUsuario } from "./firebaseConfig";
 
-const colecaoConteudos = collection(db, "conteudos");
+const colecaoConteudos = () => colecaoDoUsuario("conteudos");
 
 export async function buscarConteudos() {
-  const snapshot = await getDocs(colecaoConteudos);
+  const snapshot = await getDocs(colecaoConteudos());
   const conteudos = snapshot.docs.map((documento) => ({
     id: documento.id,
     ...documento.data(),
@@ -26,10 +24,10 @@ export async function criarConteudo(novoConteudo) {
     ...novoConteudo,
     criadoEm: new Date().toISOString(),
   };
-  const referencia = await addDoc(colecaoConteudos, dadosConteudo);
+  const referencia = await addDoc(colecaoConteudos(), dadosConteudo);
   return { id: referencia.id, ...dadosConteudo };
 }
 
 export function deletarConteudo(id) {
-  return deleteDoc(doc(db, "conteudos", id));
+  return deleteDoc(documentoDoUsuario("conteudos", id));
 }
