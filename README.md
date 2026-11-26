@@ -9,6 +9,8 @@
 ![Firebase](https://img.shields.io/badge/Firebase-Auth%20%2B%20Firestore-FFCA28?logo=firebase&logoColor=black)
 ![Status](https://img.shields.io/badge/status-em%20desenvolvimento-blue)
 
+**[Ver demonstração online](https://synapse-sigma-swart.vercel.app)**
+
 </div>
 
 ---
@@ -21,9 +23,11 @@ A ideia central é reduzir a fricção de organizar os estudos. Em vez de decidi
 
 Cada estudante tem a própria conta, e os dados ficam isolados por usuário: ninguém vê as tarefas, anotações ou sessões de estudo de outra pessoa.
 
-<!-- Dica: adicione capturas de tela aqui, por exemplo:
-![Home do Synapse](docs/home.png)
--->
+## Demonstração
+
+Acesse a versão online: **[synapse-sigma-swart.vercel.app](https://synapse-sigma-swart.vercel.app)**
+
+![Home do Synapse](media/home.png)
 
 ## Funcionalidades
 
