@@ -6,7 +6,7 @@
 
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
-![Firebase](https://img.shields.io/badge/Firebase-Firestore-FFCA28?logo=firebase&logoColor=black)
+![Firebase](https://img.shields.io/badge/Firebase-Auth%20%2B%20Firestore-FFCA28?logo=firebase&logoColor=black)
 ![Status](https://img.shields.io/badge/status-em%20desenvolvimento-blue)
 
 </div>
@@ -19,10 +19,19 @@ O **Synapse** nasceu como Trabalho de Conclusão de Curso (TCC) em Ciência da C
 
 A ideia central é reduzir a fricção de organizar os estudos. Em vez de decidir manualmente o que fazer primeiro, o Synapse calcula a prioridade de cada tarefa a partir do prazo, da dificuldade e do volume de conteúdo.
 
+Cada estudante tem a própria conta, e os dados ficam isolados por usuário: ninguém vê as tarefas, anotações ou sessões de estudo de outra pessoa.
+
+<!-- Dica: adicione capturas de tela aqui, por exemplo:
+![Home do Synapse](docs/home.png)
+-->
+
 ## Funcionalidades
 
 | Módulo | O que faz |
 | --- | --- |
+| **Landing page** | Página de apresentação do Synapse, com animações, antes de acessar o app. |
+| **Contas** | Cadastro e login por e-mail e senha ou com Google, confirmação de e-mail, recuperação de senha e opção "lembrar de mim". |
+| **Minha conta** | Alteração de nome, e-mail (com confirmação no novo endereço) e senha, além da exclusão da conta junto com todos os dados. |
 | **Home** | Painel com resumo do dia, tarefas prioritárias, próximos eventos da semana, minutos estudados e frases motivacionais. |
 | **Pomodoro** | Temporizador de foco (25 min), descanso curto (5 min) e descanso longo (15 min, a cada 4 ciclos). Pode ser vinculado a uma tarefa ativa, e cada sessão concluída é registrada. |
 | **Tarefas** | CRUD de tarefas com três visualizações: **lista**, **Kanban** e **Matriz de Eisenhower** (fazer, planejar, delegar, eliminar). |
@@ -32,7 +41,10 @@ A ideia central é reduzir a fricção de organizar os estudos. Em vez de decidi
 
 Outros detalhes:
 
+- Dados isolados por usuário no Firestore, protegidos por regras de segurança.
+- Ações sensíveis (trocar e-mail, trocar senha, excluir conta) pedem a senha atual ou a confirmação do Google.
 - Tema claro e escuro, alternável pela barra lateral.
+- Layout responsivo: barra lateral no desktop e navegação inferior no celular.
 - Cache local persistente do Firestore, permitindo uso com conexão instável e sincronização entre abas.
 - Interface em português do Brasil.
 
@@ -52,7 +64,9 @@ O resultado classifica a tarefa como prioridade **baixa** (abaixo de 4), **médi
 
 - [React 19](https://react.dev/)
 - [Vite](https://vite.dev/)
+- [Firebase Authentication](https://firebase.google.com/docs/auth) (e-mail/senha e Google)
 - [Firebase Firestore](https://firebase.google.com/docs/firestore) (banco de dados)
+- [Framer Motion](https://motion.dev/) (animações da landing page)
 - CSS puro com variáveis de tema
 - ESLint e Oxlint para análise estática
 
@@ -63,6 +77,9 @@ Synapse/
 ├── public/                  # Logo e ícones
 ├── src/
 │   ├── components/
+│   │   ├── Landing/         # Página de apresentação
+│   │   ├── login/           # Login, cadastro e confirmação de e-mail
+│   │   ├── Conta/           # Minha conta (editar dados e excluir conta)
 │   │   ├── Home/
 │   │   ├── Pomodoro/
 │   │   ├── Tarefas/         # Lista, Kanban e Matriz de Eisenhower
@@ -72,11 +89,12 @@ Synapse/
 │   │   ├── Sidebar/
 │   │   └── icons/
 │   ├── context/             # Contexto da tarefa ativa (Pomodoro ↔ Tarefas)
-│   ├── services/            # Acesso ao Firestore (tarefas, eventos, conteúdos, sessões)
+│   ├── services/            # Firebase: autenticação e acesso ao Firestore
 │   ├── styles/              # Tema claro/escuro
 │   ├── utils/               # Prioridade, calendário e agrupamento de eventos
 │   ├── App.jsx
 │   └── main.jsx
+├── firestore.rules          # Regras de segurança do Firestore
 ├── index.html
 ├── vite.config.js
 └── package.json
@@ -87,7 +105,9 @@ Synapse/
 ### Pré-requisitos
 
 - [Node.js](https://nodejs.org/) 20 ou superior
-- Um projeto no [Firebase](https://console.firebase.google.com/) com o **Firestore** habilitado
+- Um projeto no [Firebase](https://console.firebase.google.com/) com:
+  - **Firestore** habilitado
+  - **Authentication** com os provedores **E-mail/senha** e **Google** ativados
 
 ### Instalação
 
@@ -113,16 +133,20 @@ VITE_FIREBASE_MESSAGING_SENDER_ID=000000000000
 VITE_FIREBASE_APP_ID=1:000000000000:web:xxxxxxxxxxxxxxxx
 ```
 
-O Firestore usa quatro coleções, criadas automaticamente no primeiro uso:
+Os dados de cada usuário ficam em `usuarios/{uid}`, divididos em quatro subcoleções criadas automaticamente no primeiro uso:
 
-| Coleção | Conteúdo |
+| Subcoleção | Conteúdo |
 | --- | --- |
 | `tarefas` | Título, data de entrega, dificuldade, quantidade de conteúdo e status |
 | `eventos` | Título, tipo, data, descrição e se foi concluído |
 | `conteudos` | Anotações por disciplina e categoria |
 | `sessoesEstudo` | Sessões de Pomodoro concluídas (tarefa e minutos) |
 
-> **Atenção:** nunca publique o `.env.local` no repositório. Antes de colocar o app em produção, configure também as [regras de segurança do Firestore](https://firebase.google.com/docs/firestore/security/get-started).
+### Regras de segurança
+
+O arquivo [`firestore.rules`](firestore.rules) garante que cada usuário só leia e escreva os próprios dados. Para aplicá-lo, copie o conteúdo para **Firestore Database → Regras** no console do Firebase e clique em **Publicar**.
+
+> **Atenção:** nunca publique o `.env.local` no repositório.
 
 ### Executando
 
@@ -143,9 +167,14 @@ A aplicação ficará disponível em `http://localhost:5173`.
 
 ## Roadmap
 
-- [ ] Autenticação de usuários (hoje o app usa um único espaço de dados)
-- [ ] Botão de logoff funcional
-- [ ] Regras de segurança do Firestore por usuário
+- [x] Autenticação de usuários (e-mail/senha e Google)
+- [x] Logout e página "Minha conta"
+- [x] Confirmação de e-mail no cadastro
+- [x] Dados isolados por usuário e regras de segurança do Firestore
+- [x] Exclusão de conta com remoção dos dados
+- [ ] Termos de uso e política de privacidade (LGPD)
+- [ ] Testes automatizados do cálculo de prioridade
+- [ ] Rotas com URL (botão "voltar" do navegador)
 - [ ] Notificações de prazos e fim de ciclos do Pomodoro
 
 ## Autor
