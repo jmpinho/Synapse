@@ -124,19 +124,6 @@ cd Synapse
 npm install
 ```
 
-### Configuração do Firebase
-
-Crie um arquivo `.env.local` na raiz do projeto com as credenciais do seu app web do Firebase:
-
-```env
-VITE_FIREBASE_API_KEY=sua_api_key
-VITE_FIREBASE_AUTH_DOMAIN=seu-projeto.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=seu-projeto
-VITE_FIREBASE_STORAGE_BUCKET=seu-projeto.firebasestorage.app
-VITE_FIREBASE_MESSAGING_SENDER_ID=000000000000
-VITE_FIREBASE_APP_ID=1:000000000000:web:xxxxxxxxxxxxxxxx
-```
-
 Os dados de cada usuário ficam em `usuarios/{uid}`, divididos em quatro subcoleções criadas automaticamente no primeiro uso:
 
 | Subcoleção | Conteúdo |
