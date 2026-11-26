@@ -3,6 +3,7 @@ import {
   alterarEmail,
   alterarSenha,
   atualizarNome,
+  ehContaDemo,
   excluirConta,
   mensagemDeErro,
   usaSenha,
@@ -293,6 +294,27 @@ function SecaoExcluir({ comSenha }) {
 
 export default function Conta({ usuario, aoAtualizar }) {
   const comSenha = usaSenha(usuario);
+
+  // Conta compartilhada: ninguém pode mudar dados de acesso nem excluí-la
+  if (ehContaDemo(usuario)) {
+    return (
+      <div className="conta">
+        <h2>Minha conta</h2>
+        <section className="conta__secao">
+          <h3>Conta de demonstração</h3>
+          <p className="conta__descricao">
+            Você está usando a conta de demonstração, compartilhada com outros
+            visitantes. Por isso, alterar nome, e-mail ou senha e excluir a conta
+            estão desativados.
+          </p>
+          <p className="conta__descricao">
+            Gostou do Synapse? Saia e crie sua própria conta para ter seus dados
+            só para você.
+          </p>
+        </section>
+      </div>
+    );
+  }
 
   return (
     <div className="conta">

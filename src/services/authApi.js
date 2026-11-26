@@ -24,6 +24,30 @@ import { auth, colecaoDoUsuario, db } from "./firebaseConfig";
 // Se criar uma coleção nova, adicione aqui para ela ser apagada junto com a conta.
 const COLECOES_DO_USUARIO = ["tarefas", "conteudos", "eventos", "sessoesEstudo"];
 
+// ---------- Conta de demonstração ----------
+// Conta compartilhada para quem quer testar sem se cadastrar.
+// Definida no .env.local (e na Vercel); se as variáveis faltarem, o botão some.
+const DEMO_EMAIL = (import.meta.env.VITE_DEMO_EMAIL ?? "").trim().toLowerCase();
+const DEMO_SENHA = import.meta.env.VITE_DEMO_SENHA ?? "";
+
+export const demoDisponivel = Boolean(DEMO_EMAIL && DEMO_SENHA);
+
+export function ehContaDemo(usuario) {
+  return demoDisponivel && usuario?.email?.toLowerCase() === DEMO_EMAIL;
+}
+
+function bloquearSeDemo() {
+  if (ehContaDemo(auth.currentUser)) {
+    throw new Error("Esta ação não está disponível na conta de demonstração.");
+  }
+}
+
+export async function entrarComDemo() {
+  // Sessão só da aba: ao fechar o navegador, o visitante sai da conta demo
+  await definirPersistencia(false);
+  return signInWithEmailAndPassword(auth, DEMO_EMAIL, DEMO_SENHA);
+}
+
 function definirPersistencia(lembrar) {
   return setPersistence(
     auth,
@@ -71,7 +95,13 @@ export function usaSenha(usuario) {
 
 // Contas do Google já chegam verificadas; só quem usa senha precisa confirmar
 export function precisaVerificarEmail(usuario) {
-  return Boolean(usuario) && usaSenha(usuario) && !usuario.emailVerified;
+  // A conta demo usa um e-mail fictício, então nunca seria confirmada
+  return (
+    Boolean(usuario) &&
+    usaSenha(usuario) &&
+    !usuario.emailVerified &&
+    !ehContaDemo(usuario)
+  );
 }
 
 export function reenviarVerificacao() {
@@ -101,17 +131,20 @@ async function reautenticar(senhaAtual) {
   }
 }
 
-export function atualizarNome(nome) {
+export async function atualizarNome(nome) {
+  bloquearSeDemo();
   return updateProfile(auth.currentUser, { displayName: nome.trim() });
 }
 
 // O e-mail só muda depois que a pessoa clicar no link enviado ao endereço NOVO
 export async function alterarEmail(novoEmail, senhaAtual) {
+  bloquearSeDemo();
   await reautenticar(senhaAtual);
   await verifyBeforeUpdateEmail(auth.currentUser, novoEmail.trim());
 }
 
 export async function alterarSenha(senhaAtual, novaSenha) {
+  bloquearSeDemo();
   await reautenticar(senhaAtual);
   await updatePassword(auth.currentUser, novaSenha);
 }
@@ -131,6 +164,7 @@ async function apagarDadosDoUsuario() {
 // A ordem importa: primeiro os dados (as regras do Firestore só deixam o
 // próprio usuário apagá-los), depois o login. deleteUser sozinho NÃO apaga os dados.
 export async function excluirConta(senhaAtual) {
+  bloquearSeDemo();
   await reautenticar(senhaAtual);
   await apagarDadosDoUsuario();
   await deleteUser(auth.currentUser);

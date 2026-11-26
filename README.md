@@ -27,6 +27,8 @@ Cada estudante tem a própria conta, e os dados ficam isolados por usuário: nin
 
 Acesse a versão online: **[synapse-sigma-swart.vercel.app](https://synapse-sigma-swart.vercel.app)**
 
+Para testar sem criar conta, clique em **"Só quero testar: entrar na conta de demonstração"** na tela de login. A conta demo é compartilhada entre visitantes, e nela não é possível alterar dados de acesso nem excluir a conta.
+
 ![Home do Synapse](media/home.png)
 
 ## Funcionalidades
@@ -135,7 +137,13 @@ VITE_FIREBASE_PROJECT_ID=seu-projeto
 VITE_FIREBASE_STORAGE_BUCKET=seu-projeto.firebasestorage.app
 VITE_FIREBASE_MESSAGING_SENDER_ID=000000000000
 VITE_FIREBASE_APP_ID=1:000000000000:web:xxxxxxxxxxxxxxxx
+
+# Opcional: conta de demonstração (crie o usuário em Authentication → Users)
+VITE_DEMO_EMAIL=demo@example.com
+VITE_DEMO_SENHA=senha_da_conta_demo
 ```
+
+Sem as variáveis `VITE_DEMO_*`, o botão da conta de demonstração não aparece.
 
 Os dados de cada usuário ficam em `usuarios/{uid}`, divididos em quatro subcoleções criadas automaticamente no primeiro uso:
 

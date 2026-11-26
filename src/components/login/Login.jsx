@@ -1,6 +1,8 @@
 import { useState } from "react";
 import {
   cadastrarComEmail,
+  demoDisponivel,
+  entrarComDemo,
   entrarComEmail,
   entrarComGoogle,
   mensagemDeErro,
@@ -84,6 +86,18 @@ export default function Login({ aoVoltar }) {
     setCarregando(true);
     try {
       await entrarComGoogle(lembrar);
+    } catch (e) {
+      setErro(mensagemDeErro(e));
+    } finally {
+      setCarregando(false);
+    }
+  }
+
+  async function entrarDemo() {
+    setErro("");
+    setCarregando(true);
+    try {
+      await entrarComDemo();
     } catch (e) {
       setErro(mensagemDeErro(e));
     } finally {
@@ -219,6 +233,16 @@ export default function Login({ aoVoltar }) {
               </svg>
               Continuar com Google
             </button>
+            {demoDisponivel && (
+              <button
+                type="button"
+                className="login__botao-demo"
+                onClick={entrarDemo}
+                disabled={carregando}
+              >
+                Só quero testar: entrar na conta de demonstração
+              </button>
+            )}
           </>
         )}
 

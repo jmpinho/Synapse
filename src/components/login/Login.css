@@ -318,6 +318,32 @@
   margin-top: 18px;
 }
 
+/* Botão da conta de demonstração: discreto, tracejado, abaixo do Google */
+.login__botao-demo {
+  width: 100%;
+  min-height: 40px;
+  margin-top: 10px;
+  padding: 8px 12px;
+  border: 1px dashed var(--borda);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--texto-sec);
+  font-family: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.login__botao-demo:hover:not(:disabled) {
+  border-color: var(--destaque);
+  color: var(--texto);
+}
+
+.login__botao-demo:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .login :focus-visible {
   outline: 2px solid #ffffff;
   outline-offset: 2px;
