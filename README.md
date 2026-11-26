@@ -137,10 +137,6 @@ VITE_FIREBASE_PROJECT_ID=seu-projeto
 VITE_FIREBASE_STORAGE_BUCKET=seu-projeto.firebasestorage.app
 VITE_FIREBASE_MESSAGING_SENDER_ID=000000000000
 VITE_FIREBASE_APP_ID=1:000000000000:web:xxxxxxxxxxxxxxxx
-
-# Opcional: conta de demonstração (crie o usuário em Authentication → Users)
-VITE_DEMO_EMAIL=demo@example.com
-VITE_DEMO_SENHA=senha_da_conta_demo
 ```
 
 Sem as variáveis `VITE_DEMO_*`, o botão da conta de demonstração não aparece.
