@@ -13,7 +13,12 @@ function calcularNotaUrgencia(dataEntrega) {
   const hoje = new Date();
   hoje.setHours(0, 0, 0, 0);
 
-  const entrega = new Date(dataEntrega);
+  // "AAAA-MM-DD" sozinho é lido como UTC; com "T00:00:00" vira meia-noite local.
+  // Sem isso, no Brasil (UTC-3) a entrega cairia no dia anterior.
+  const entrega =
+    typeof dataEntrega === "string" && /^\d{4}-\d{2}-\d{2}$/.test(dataEntrega)
+      ? new Date(dataEntrega + "T00:00:00")
+      : new Date(dataEntrega);
   entrega.setHours(0, 0, 0, 0);
 
   const diasRestantes = Math.round((entrega - hoje) / MS_POR_DIA);

@@ -48,7 +48,7 @@ export default function Cronograma() {
       .then((dados) => setEventos(dados))
       .catch(() =>
         setErro(
-          "Não foi possível carregar o cronograma. A API fake está rodando? (npm run api)"
+          "Não foi possível carregar o cronograma. Verifique sua conexão e recarregue a página."
         )
       )
       .finally(() => setCarregando(false));

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { calcularPrioridade } from "../../utils/calcularPrioridade";
+import { paraISO } from "../../utils/calendario";
 import {
   listarTarefas,
   criarTarefa,
@@ -20,7 +21,7 @@ import "./Tarefas.css";
 function dataDeAmanha() {
   const amanha = new Date();
   amanha.setDate(amanha.getDate() + 1);
-  return amanha.toISOString().slice(0, 10);
+  return paraISO(amanha);
 }
 
 function formularioVazio() {
